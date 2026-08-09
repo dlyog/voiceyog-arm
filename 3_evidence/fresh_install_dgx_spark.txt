@@ -1,0 +1,54 @@
+# Fresh-environment install — NVIDIA DGX Spark (GB10), Ubuntu 24.04, aarch64
+# Recorded 2026-08-09 16:42:05 UTC. Clean unzip, no prior state, no network.
+
+$ bash install.sh
+
+VoiceYog Local TTS — install
+
+
+  System compatibility
+    pass  architecture       aarch64
+    pass  operating system   Ubuntu 24.04.4 LTS — glibc 2.39 (minimum 2.28)
+    pass  python             3.12.3 at /usr/bin/python3.12
+    pass  espeak-ng          1.51
+    pass  memory             121 GB RAM (needs ~310 MB; 8 GB recommended)
+    pass  free disk          376 GB here (needs ~600 MB)
+
+  All 6 checks passed.
+
+  ok    bundle checksums verified (102 files)
+  ok    dependencies installed from the bundle (32 wheels, no network)
+  ok    inference engine already vendored
+  ok    model read from this bundle (123M) — nothing copied
+  created signing key 195568f4157e0d28
+  ok    signing key ready
+
+  ok    installed
+
+  start the server:   ./start.sh
+  then:               curl http://127.0.0.1:8823/health
+
+
+$ bash start.sh --port 8910 --background
+  up: http://127.0.0.1:8910  (pid 636025)
+  test page: http://127.0.0.1:8910/
+
+$ curl -s localhost:8910/model
+{
+    "model_id": "kokoro-heart-new",
+    "model_version": "v3",
+    "model_sha256": "63ec62a3316911559328ac2eb24c57123de1e2c609792c0560ded5a79a35273c",
+    "model_bytes": 71844142,
+    "model_path": "/home/dlyog/vy_v3/voiceyog-local-tts-kokoro-heart-new-dgx-os-1.0.0/models/kokoro-heart-new.onnx",
+    "sample_rate": 24000,
+    "providers": [
+        "CPUExecutionProvider"
+    ],
+    "threads": 9,
+    "load_ms": 644.6
+}
+
+$ curl -s -X POST localhost:8910/tts  (x3)
+   synth_ms 120.3  rtf 0.0561  audio_s 2.144
+   synth_ms 86.8  rtf 0.03969  audio_s 2.187
+   synth_ms 82.5  rtf 0.03547  audio_s 2.325

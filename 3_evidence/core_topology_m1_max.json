@@ -1,0 +1,13 @@
+{
+  "platform": "macos",
+  "machine": "arm64",
+  "brand": "Apple M1 Max",
+  "performance_cores": 8,
+  "efficiency_cores": 2,
+  "logical_cpus": 10,
+  "asymmetric": true,
+  "pinning_available": false,
+  "performance_contiguous": null,
+  "recommended_threads": 8,
+  "recommended_because": "8 performance cores; macOS places threads itself"
+}

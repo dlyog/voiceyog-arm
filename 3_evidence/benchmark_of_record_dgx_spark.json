@@ -1,0 +1,70 @@
+{
+  "measured_at": "2026-08-09 17:04:22 UTC",
+  "gpu_utilisation_before_start_pct": 0,
+  "hardware": {
+    "machine": "aarch64",
+    "gpu": "NVIDIA GB10",
+    "os": "Linux-6.17.0-1014-nvidia-aarch64-with-glibc2.39"
+  },
+  "python": "3.12.3",
+  "checkpoint": "/home/dlyog/.voiceyog/models/kokoro-heart-new/v3/kokoro-heart-new_decoder.pt",
+  "artifact_sizes_mb": {
+    "full_onnx": 68.52,
+    "cpu_prefix_onnx": 54.14,
+    "kokoro_reference": 326.0
+  },
+  "eval_set": {
+    "file": "/home/dlyog/armtts/3_ExportAndInferenceEngine/tts/eval_sentences.txt",
+    "n": 20
+  },
+  "warmup_sentences": 5,
+  "results": {
+    "ours_hybrid": {
+      "engine": "ours_hybrid",
+      "n_sentences": 20,
+      "latency_ms_mean": 42.16,
+      "latency_ms_median": 42.33,
+      "rtf_mean": 0.01957,
+      "rtf_worst": 0.02504,
+      "audio_generated_sec": 43.5,
+      "peak_rss_mb": 1897.7,
+      "stages": {
+        "arm_cpu_prefix_ms": 14.206,
+        "handoff_ms": 0.1215,
+        "gpu_decoder_ms": 10.428,
+        "arm_cpu_share_pct": 57.4,
+        "handoff_share_pct": 0.49
+      }
+    },
+    "ours_cpu": {
+      "engine": "ours_cpu",
+      "n_sentences": 20,
+      "latency_ms_mean": 82.89,
+      "latency_ms_median": 83.31,
+      "rtf_mean": 0.03888,
+      "rtf_worst": 0.04279,
+      "audio_generated_sec": 42.85,
+      "peak_rss_mb": 355.7
+    },
+    "kokoro_gpu": {
+      "engine": "kokoro_gpu",
+      "n_sentences": 20,
+      "latency_ms_mean": 40.14,
+      "latency_ms_median": 39.58,
+      "rtf_mean": 0.01418,
+      "rtf_worst": 0.01598,
+      "audio_generated_sec": 56.85,
+      "peak_rss_mb": 3464.3
+    },
+    "kokoro_cpu": {
+      "engine": "kokoro_cpu",
+      "n_sentences": 20,
+      "latency_ms_mean": 947.49,
+      "latency_ms_median": 949.41,
+      "rtf_mean": 0.33447,
+      "rtf_worst": 0.38862,
+      "audio_generated_sec": 56.85,
+      "peak_rss_mb": 2661.0
+    }
+  }
+}

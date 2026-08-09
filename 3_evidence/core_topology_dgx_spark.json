@@ -1,0 +1,214 @@
+{
+  "platform": "linux",
+  "machine": "aarch64",
+  "cores": [
+    {
+      "cpu": 0,
+      "midr": "0x00000000410fd871",
+      "part": "0xd87",
+      "name": "Cortex-A725",
+      "capacity": 718,
+      "max_khz": 2808000,
+      "class": "efficiency"
+    },
+    {
+      "cpu": 1,
+      "midr": "0x00000000410fd871",
+      "part": "0xd87",
+      "name": "Cortex-A725",
+      "capacity": 718,
+      "max_khz": 2808000,
+      "class": "efficiency"
+    },
+    {
+      "cpu": 2,
+      "midr": "0x00000000410fd871",
+      "part": "0xd87",
+      "name": "Cortex-A725",
+      "capacity": 718,
+      "max_khz": 2808000,
+      "class": "efficiency"
+    },
+    {
+      "cpu": 3,
+      "midr": "0x00000000410fd871",
+      "part": "0xd87",
+      "name": "Cortex-A725",
+      "capacity": 718,
+      "max_khz": 2808000,
+      "class": "efficiency"
+    },
+    {
+      "cpu": 4,
+      "midr": "0x00000000410fd871",
+      "part": "0xd87",
+      "name": "Cortex-A725",
+      "capacity": 718,
+      "max_khz": 2808000,
+      "class": "efficiency"
+    },
+    {
+      "cpu": 5,
+      "midr": "0x00000000410fd851",
+      "part": "0xd85",
+      "name": "Cortex-X925",
+      "capacity": 997,
+      "max_khz": 3900000,
+      "class": "performance"
+    },
+    {
+      "cpu": 6,
+      "midr": "0x00000000410fd851",
+      "part": "0xd85",
+      "name": "Cortex-X925",
+      "capacity": 997,
+      "max_khz": 3900000,
+      "class": "performance"
+    },
+    {
+      "cpu": 7,
+      "midr": "0x00000000410fd851",
+      "part": "0xd85",
+      "name": "Cortex-X925",
+      "capacity": 997,
+      "max_khz": 3900000,
+      "class": "performance"
+    },
+    {
+      "cpu": 8,
+      "midr": "0x00000000410fd851",
+      "part": "0xd85",
+      "name": "Cortex-X925",
+      "capacity": 997,
+      "max_khz": 3900000,
+      "class": "performance"
+    },
+    {
+      "cpu": 9,
+      "midr": "0x00000000410fd851",
+      "part": "0xd85",
+      "name": "Cortex-X925",
+      "capacity": 997,
+      "max_khz": 3900000,
+      "class": "performance"
+    },
+    {
+      "cpu": 10,
+      "midr": "0x00000000410fd871",
+      "part": "0xd87",
+      "name": "Cortex-A725",
+      "capacity": 731,
+      "max_khz": 2808000,
+      "class": "efficiency"
+    },
+    {
+      "cpu": 11,
+      "midr": "0x00000000410fd871",
+      "part": "0xd87",
+      "name": "Cortex-A725",
+      "capacity": 731,
+      "max_khz": 2808000,
+      "class": "efficiency"
+    },
+    {
+      "cpu": 12,
+      "midr": "0x00000000410fd871",
+      "part": "0xd87",
+      "name": "Cortex-A725",
+      "capacity": 731,
+      "max_khz": 2808000,
+      "class": "efficiency"
+    },
+    {
+      "cpu": 13,
+      "midr": "0x00000000410fd871",
+      "part": "0xd87",
+      "name": "Cortex-A725",
+      "capacity": 731,
+      "max_khz": 2808000,
+      "class": "efficiency"
+    },
+    {
+      "cpu": 14,
+      "midr": "0x00000000410fd871",
+      "part": "0xd87",
+      "name": "Cortex-A725",
+      "capacity": 731,
+      "max_khz": 2808000,
+      "class": "efficiency"
+    },
+    {
+      "cpu": 15,
+      "midr": "0x00000000410fd851",
+      "part": "0xd85",
+      "name": "Cortex-X925",
+      "capacity": 1017,
+      "max_khz": 3900000,
+      "class": "performance"
+    },
+    {
+      "cpu": 16,
+      "midr": "0x00000000410fd851",
+      "part": "0xd85",
+      "name": "Cortex-X925",
+      "capacity": 1017,
+      "max_khz": 3900000,
+      "class": "performance"
+    },
+    {
+      "cpu": 17,
+      "midr": "0x00000000410fd851",
+      "part": "0xd85",
+      "name": "Cortex-X925",
+      "capacity": 1017,
+      "max_khz": 3900000,
+      "class": "performance"
+    },
+    {
+      "cpu": 18,
+      "midr": "0x00000000410fd851",
+      "part": "0xd85",
+      "name": "Cortex-X925",
+      "capacity": 1017,
+      "max_khz": 3900000,
+      "class": "performance"
+    },
+    {
+      "cpu": 19,
+      "midr": "0x00000000410fd851",
+      "part": "0xd85",
+      "name": "Cortex-X925",
+      "capacity": 1024,
+      "max_khz": 3900000,
+      "class": "performance"
+    }
+  ],
+  "performance_cpus": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "efficiency_cpus": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "asymmetric": true,
+  "performance_contiguous": false,
+  "recommended_threads": 9,
+  "recommended_because": "10 performance cores, minus one for the OS and the phonemizer subprocess"
+}

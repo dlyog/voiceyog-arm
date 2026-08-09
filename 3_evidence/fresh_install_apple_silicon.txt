@@ -1,0 +1,54 @@
+# Fresh-environment install — Apple M1 Max, macOS 26.5.2, arm64
+# Recorded 2026-08-09 16:45:11 UTC. Clean unzip, no prior state, no network.
+
+$ bash install.sh
+
+VoiceYog Local TTS — install
+
+
+  System compatibility
+    pass  architecture       arm64 — Apple M1 Max
+    pass  operating system   macOS 26.5.2 (minimum 13.0)
+    pass  python             3.12.13 at /opt/homebrew/bin/python3.12
+    pass  espeak-ng          1.52.0
+    pass  memory             64 GB unified memory (needs ~310 MB; 8 GB recommended)
+    pass  free disk          742 GB here (needs ~600 MB)
+
+  All 6 checks passed.
+
+  ok    bundle checksums verified (102 files)
+  ok    dependencies installed from the bundle (32 wheels, no network)
+  ok    inference engine already vendored
+  ok    model read from this bundle (123M) — nothing copied
+  created signing key 2ecad28b5a185a0f
+  ok    signing key ready
+
+  ok    installed
+
+  start the server:   ./start.sh
+  then:               curl http://127.0.0.1:8823/health
+
+
+$ bash start.sh --port 8911 --background
+  up: http://127.0.0.1:8911  (pid 81782)
+  test page: http://127.0.0.1:8911/
+
+$ curl -s localhost:8911/model
+{
+    "model_id": "kokoro-heart-new",
+    "model_version": "v3",
+    "model_sha256": "63ec62a3316911559328ac2eb24c57123de1e2c609792c0560ded5a79a35273c",
+    "model_bytes": 71844142,
+    "model_path": "/private/tmp/claude-501/-Users-dlyoglab-Documents-github-movtts/0ca66cb0-d314-4f99-8b7c-c86b9106c8e5/scratchpad/cleanv3/voiceyog-local-tts-kokoro-heart-new-apple-silicon-1.0.0/models/kokoro-heart-new.onnx",
+    "sample_rate": 24000,
+    "providers": [
+        "CPUExecutionProvider"
+    ],
+    "threads": 8,
+    "load_ms": 582.2
+}
+
+$ curl -s -X POST localhost:8911/tts  (x3)
+   synth_ms 113.9  rtf 0.05506  audio_s 2.069
+   synth_ms 114.6  rtf 0.05623  audio_s 2.037
+   synth_ms 119.1  rtf 0.05786  audio_s 2.059

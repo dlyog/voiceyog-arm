@@ -1,0 +1,152 @@
+{
+  "measured_at": "2026-08-09 16:43:15 UTC",
+  "machine": {
+    "machine": "aarch64",
+    "system": "Linux",
+    "release": "6.17.0-1014-nvidia",
+    "logical_cpus": 20
+  },
+  "model": {
+    "file": "kokoro-heart-new.onnx",
+    "bytes": 71844142
+  },
+  "n_sentences": 20,
+  "topology_recommendation": 9,
+  "rows": [
+    {
+      "threads": null,
+      "effective_threads": null,
+      "n": 20,
+      "latency_ms_median": 136.02,
+      "latency_ms_mean": 135.85,
+      "latency_ms_min": 107.39,
+      "latency_ms_max": 162.53,
+      "rtf_median": 0.06294,
+      "audio_sec": 43.22,
+      "session_load_ms": 647.3
+    },
+    {
+      "threads": 1,
+      "effective_threads": 1,
+      "n": 20,
+      "latency_ms_median": 350.01,
+      "latency_ms_mean": 350.45,
+      "latency_ms_min": 271.06,
+      "latency_ms_max": 421.4,
+      "rtf_median": 0.16196,
+      "audio_sec": 43.22,
+      "session_load_ms": 594.6
+    },
+    {
+      "threads": 2,
+      "effective_threads": 2,
+      "n": 20,
+      "latency_ms_median": 196.59,
+      "latency_ms_mean": 197.56,
+      "latency_ms_min": 157.67,
+      "latency_ms_max": 237.12,
+      "rtf_median": 0.09097,
+      "audio_sec": 43.22,
+      "session_load_ms": 615.0
+    },
+    {
+      "threads": 4,
+      "effective_threads": 4,
+      "n": 20,
+      "latency_ms_median": 123.26,
+      "latency_ms_mean": 122.89,
+      "latency_ms_min": 96.78,
+      "latency_ms_max": 144.98,
+      "rtf_median": 0.05704,
+      "audio_sec": 43.22,
+      "session_load_ms": 626.9
+    },
+    {
+      "threads": 6,
+      "effective_threads": 6,
+      "n": 20,
+      "latency_ms_median": 95.18,
+      "latency_ms_mean": 95.62,
+      "latency_ms_min": 77.1,
+      "latency_ms_max": 111.46,
+      "rtf_median": 0.04404,
+      "audio_sec": 43.22,
+      "session_load_ms": 616.8
+    },
+    {
+      "threads": 8,
+      "effective_threads": 8,
+      "n": 20,
+      "latency_ms_median": 84.97,
+      "latency_ms_mean": 84.32,
+      "latency_ms_min": 67.06,
+      "latency_ms_max": 97.64,
+      "rtf_median": 0.03932,
+      "audio_sec": 43.22,
+      "session_load_ms": 611.6
+    },
+    {
+      "threads": 9,
+      "effective_threads": 9,
+      "n": 20,
+      "latency_ms_median": 82.49,
+      "latency_ms_mean": 80.9,
+      "latency_ms_min": 65.5,
+      "latency_ms_max": 93.44,
+      "rtf_median": 0.03817,
+      "audio_sec": 43.22,
+      "session_load_ms": 578.5
+    },
+    {
+      "threads": 10,
+      "effective_threads": 10,
+      "n": 20,
+      "latency_ms_median": 84.47,
+      "latency_ms_mean": 89.95,
+      "latency_ms_min": 66.2,
+      "latency_ms_max": 168.57,
+      "rtf_median": 0.03909,
+      "audio_sec": 43.22,
+      "session_load_ms": 576.8
+    },
+    {
+      "threads": 12,
+      "effective_threads": 12,
+      "n": 20,
+      "latency_ms_median": 131.23,
+      "latency_ms_mean": 131.49,
+      "latency_ms_min": 104.77,
+      "latency_ms_max": 156.89,
+      "rtf_median": 0.06072,
+      "audio_sec": 43.22,
+      "session_load_ms": 577.1
+    },
+    {
+      "threads": 16,
+      "effective_threads": 16,
+      "n": 20,
+      "latency_ms_median": 111.65,
+      "latency_ms_mean": 112.65,
+      "latency_ms_min": 88.33,
+      "latency_ms_max": 132.88,
+      "rtf_median": 0.05166,
+      "audio_sec": 43.22,
+      "session_load_ms": 630.3
+    },
+    {
+      "threads": 20,
+      "effective_threads": 20,
+      "n": 20,
+      "latency_ms_median": 114.37,
+      "latency_ms_mean": 112.97,
+      "latency_ms_min": 88.36,
+      "latency_ms_max": 128.88,
+      "rtf_median": 0.05293,
+      "audio_sec": 43.22,
+      "session_load_ms": 578.8
+    }
+  ],
+  "best_threads": 9,
+  "speedup_vs_ort_default": 1.649,
+  "speedup_vs_all_cores": 1.386
+}

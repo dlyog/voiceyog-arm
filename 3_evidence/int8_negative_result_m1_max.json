@@ -1,0 +1,28 @@
+{
+  "measured_at": "2026-08-09 16:44:51 UTC",
+  "machine": {
+    "machine": "arm64",
+    "system": "Darwin",
+    "release": "25.5.0"
+  },
+  "threads": 8,
+  "n_sentences": 10,
+  "float32": {
+    "median_ms": 124.4,
+    "mean_ms": 123.4,
+    "bytes": 71844142
+  },
+  "int8": {
+    "bytes": 21515074,
+    "ran": false,
+    "error": "NotImplemented: [ONNXRuntimeError] : 9 : NOT_IMPLEMENTED : Could not find an implementation for ConvInteger(10) node with name '/enc_p/encoder/attn_layers.0/conv_q/Conv_quant'"
+  },
+  "int8_ran": false,
+  "integer_ops_introduced": {
+    "DequantizeLinear": 1,
+    "DynamicQuantizeLinear": 162,
+    "ConvInteger": 183
+  },
+  "size_reduction": 3.339,
+  "inference_slowdown": null
+}
