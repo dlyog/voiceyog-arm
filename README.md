@@ -27,7 +27,7 @@ less memory** on the same Arm CPU.
 
 ## Demo
 
-[![Watch the demo — Apple M1 Max and DGX Spark side by side](demo/thumbnail.png)](https://youtu.be/Aw3xoq2rTG0)
+[![Watch the demo — Apple M1 Max and DGX Spark side by side](https://img.youtube.com/vi/Aw3xoq2rTG0/maxresdefault.jpg)](https://youtu.be/Aw3xoq2rTG0)
 
 **▶ [youtu.be/Aw3xoq2rTG0](https://youtu.be/Aw3xoq2rTG0)** — 3 minutes. Apple M1
 Max on the left, NVIDIA DGX Spark GB10 on the right, running the same repository
@@ -38,8 +38,7 @@ Mac loads **8 threads** while the DGX Spark loads **9**. Nothing was configured.
 That number is the optimization, and it is read off the silicon at startup.
 
 **Every word of the narration is spoken by the model itself**, on an Arm CPU,
-with no GPU and no network. Transcript: [`demo/TRANSCRIPT.md`](demo/TRANSCRIPT.md).
-The file is also in this repo at [`demo/voiceyog-arm-demo.mp4`](demo/voiceyog-arm-demo.mp4).
+with no GPU and no network — the same 68.5 MB model these packages install.
 
 ---
 
@@ -264,7 +263,6 @@ manage.sh            install | start | stop | status | log | demo | uninstall
 ARCHITECTURE.html    the design in one picture
 SUBMISSION.md        the full write-up (SUBMISSION.html renders identically)
 
-demo/                the 3-minute video + its transcript
 1_packages/          download.sh + SHA256SUMS   (the zips are release assets)
 2_arm_optimization/  the optimization, as four scripts you can run
 3_evidence/          every number, in the file that produced it
