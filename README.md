@@ -2,27 +2,30 @@
 
 **Tarun Kumar Chawdhury** · DLYog Lab Research Services LLC · Apache 2.0
 
-A 326 MB multi-voice text-to-speech model, distilled to **68.5 MB** for a single
-voice, then tuned for the asymmetric Arm CPUs it actually runs on — the Grace
-CPU on **NVIDIA DGX Spark (GB10)** and **Apple Silicon**.
+**[Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)** — the gold standard
+for lightweight TTS — distilled to **one voice** and re-tuned for the asymmetric
+Arm CPUs it actually runs on: the Grace CPU on **NVIDIA DGX Spark (GB10)** and
+**Apple Silicon**. 326 MB becomes **68.5 MB**, and it runs **8.6× faster in 7.5×
+less memory** on the same Arm CPU.
 
-**No GPU. No CUDA. No PyTorch at inference. No network.** Each package carries
-its own Python wheels and verifies 102 checksums before it does anything.
+**No GPU. No CUDA. No PyTorch at inference. No network.**
+
+📐 **[ARCHITECTURE.html](ARCHITECTURE.html)** — the whole thing in one picture.
 
 ---
 
-## Three steps, from a clean machine to a voice
+## Run it
 
 ```bash
-brew install espeak-ng                 # macOS      (sudo apt-get install espeak-ng on Linux)
+brew install espeak-ng                 # macOS   ·   sudo apt-get install espeak-ng on Linux
 git clone https://github.com/dlyog/voiceyog-arm.git && cd voiceyog-arm
 bash manage.sh install
 ```
 
-That's it. `install` detects whether you are on Apple Silicon or a DGX Spark,
-downloads the right package, verifies its sha256, unpacks it, runs the bundle's
-own installer (102 more checksums, 32 vendored wheels, **pip never touches the
-network**), starts the server in the background and prints a URL:
+Three commands, from a clean machine to a voice. `install` works out whether
+this is Apple Silicon or a DGX Spark, fetches the right package, verifies its
+sha256, installs it — 102 more checksums, 32 vendored wheels, **pip never
+touches the network** — starts the server and prints a URL:
 
 ```
   serving            kokoro-heart-new:v3  8 threads  68.5 MB
@@ -32,16 +35,29 @@ network**), starts the server in the background and prints a URL:
 Open it and type something.
 
 ```
-bash manage.sh install | start | stop | status | log [N] | demo [text] | uninstall
+bash manage.sh  install | start | stop | status | log [N] | demo [text] | uninstall
 ```
 
-Prerequisites are checked **before** the 170 MB download, not after — a missing
-phonemizer should cost you two seconds, not two minutes. `espeak-ng` runs as a
-**separate process**, never linked, which keeps its GPL terms out of the
-shipped runtime.
+Prerequisites are checked **before** the 170 MB download, so a missing
+phonemizer costs you two seconds rather than two minutes.
 
-Prefer to do it by hand? The package is self-contained and needs none of the
-above:
+<details>
+<summary>Where the packages live, and how to install one by hand</summary>
+
+<br>
+
+The two packages are
+[**release assets**](https://github.com/dlyog/voiceyog-arm/releases/latest), not
+files in this repository — both exceed GitHub's 100 MB per-file limit, and Git
+LFS bills bandwidth per download. Checksums are committed in
+[`1_packages/SHA256SUMS`](1_packages/SHA256SUMS).
+
+| target | hardware | size |
+|---|---|---|
+| `apple-silicon` | macOS 13+ on M-series | 171 MB |
+| `dgx-spark` | aarch64 Linux, DGX Spark GB10 | 154 MB |
+
+Each is fully self-contained and needs none of `manage.sh`:
 
 ```bash
 bash 1_packages/download.sh          # detects your machine, verifies sha256
@@ -50,30 +66,24 @@ cd voiceyog-local-tts-kokoro-heart-new-*
 bash install.sh && bash start.sh
 ```
 
-The two packages are **[release assets](https://github.com/dlyog/voiceyog-arm/releases/latest)**,
-not files in this repository — both exceed GitHub's 100 MB per-file limit, and
-Git LFS bills bandwidth per download. Checksums are committed in
-[`1_packages/SHA256SUMS`](1_packages/SHA256SUMS).
+`espeak-ng` is the phonemizer. It runs as a **separate process**, never linked,
+which is what keeps its GPL terms out of the shipped runtime.
 
-| target | hardware | size |
-|---|---|---|
-| `apple-silicon` | macOS 13+ on M-series | 171 MB |
-| `dgx-spark` | aarch64 Linux, DGX Spark GB10 | 154 MB |
-
-**Architecture at a glance:** [`ARCHITECTURE.html`](ARCHITECTURE.html) — the
-pipeline, the split point, and what runs where.
+</details>
 
 ---
 
 ## Why one voice
 
-Kokoro-82M serves eleven voices and several languages. Almost nobody needs
-that. A person who has banked their own voice — before illness takes it, or
-simply because it is theirs — needs exactly **one** voice, forever, on hardware
-they own, with no network and no subscription.
+Kokoro-82M is excellent, and it is excellent at being *general* — eleven voices,
+several languages, in 326 MB. Almost nobody uses it that way. A person who has
+banked their own voice — before illness takes it, or simply because it is
+theirs — needs exactly **one** voice, forever, on hardware they own, with no
+network and no subscription.
 
-That is not a smaller version of the same product. It changes what the model
-has to contain:
+So this is not "Kokoro, but worse". It is Kokoro **specialised**: the same
+architecture, one voice, re-tuned for the CPU it will actually live on. And
+specialising changes what the model has to contain at all:
 
 | Kokoro-82M component | params | needed for one voice? |
 |---|---|---|
@@ -233,20 +243,36 @@ Reproduce it: `2_arm_optimization/3_int8_negative_result.py`.
 
 ---
 
-## Licence and attribution
+## Built on open source, with thanks
+
+**None of this exists without work that other people gave away.**
+
+⭐ **[Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)** (Apache-2.0) is
+the one to star. It is the gold standard for lightweight TTS — 82 M parameters
+producing audio that much larger models struggle to match — and it is both the
+teacher this model was distilled from and the baseline it is measured against.
+Every comparison in this repository exists because Kokoro was good enough and
+open enough to measure against. **We did not beat Kokoro. We specialised it**,
+for one voice on one class of CPU. This work is not affiliated with or endorsed
+by it.
+
+| project | licence | what it gave us |
+|---|---|---|
+| [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) | Apache-2.0 | the teacher voice, the training audio, and the baseline |
+| [VITS](https://github.com/jaywalnut310/vits) | MIT | the student architecture |
+| [HiFi-GAN](https://github.com/jik876/hifi-gan) | MIT | the vocoder our 3.76 M generator is |
+| [ONNX Runtime](https://onnxruntime.ai/) | MIT | the CPU inference engine, and the thread knob this whole submission turns |
+| [espeak-ng](https://github.com/espeak-ng/espeak-ng) | GPL-3.0 | phonemisation — run as a **separate process**, never linked |
+| [NumPy](https://numpy.org/) · [FastAPI](https://fastapi.tiangolo.com/) · [uvicorn](https://www.uvicorn.org/) · [pydantic](https://docs.pydantic.dev/) · [cryptography](https://cryptography.io/) | BSD / MIT / Apache-2.0 | the runtime, the API, and the signatures |
+| [CMU ARCTIC](http://www.festvox.org/cmu_arctic/) | free | prompt text only — none of their recorded audio is used |
+
+The shipped runtime is permissively licensed throughout. `espeak-ng` is GPL-3.0
+and is invoked as a separate process — running a program is not linking — which
+is why the Python bindings that *would* link it are deliberately not used.
+
+---
+
+## Licence
 
 Copyright © 2026 Tarun Kumar Chawdhury, DLYog Lab Research Services LLC.
 Apache License 2.0 — see [`LICENSE`](LICENSE).
-
-The shipped runtime is permissive throughout: onnxruntime (MIT), numpy (BSD),
-FastAPI/uvicorn/pydantic (MIT/BSD), cryptography (Apache-2.0).
-
-- **[Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)** (Apache-2.0) —
-  the teacher for the training audio and the comparison baseline. This work is
-  not affiliated with or endorsed by it.
-- Architecture adapted from **[VITS](https://github.com/jaywalnut310/vits)** and
-  **[HiFi-GAN](https://github.com/jik876/hifi-gan)** (both MIT).
-- **[CMU ARCTIC](http://www.festvox.org/cmu_arctic/)** — prompt text only; none
-  of their recorded audio is used.
-- **espeak-ng** (GPL-3.0) is invoked as a separate process, never linked. The
-  Python bindings that *would* link it are deliberately not used.

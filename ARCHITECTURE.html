@@ -26,7 +26,13 @@
   .small{font-size:14.5px;color:#5f5c50;line-height:1.5;margin:0}
   .rule{height:1px;background:#e6e1d8;margin:22px 0}
 
-  .nums{display:flex;gap:34px;margin-top:auto}
+  .teach{margin-top:auto;border-top:1px solid #e6e1d8;padding-top:20px}
+  .kok{font-size:21px;margin:0 0 8px;letter-spacing:-.01em}
+  .kok b{font-weight:700}
+  .kok span{font:11px/1 "SF Mono",Menlo,monospace;color:#8a8578;
+            border:1px solid #ded7cb;border-radius:999px;padding:4px 9px;
+            margin-left:9px;vertical-align:3px}
+  .nums{display:flex;gap:34px;margin-top:0}
   .n .k{font:600 10.5px/1 "SF Mono",Menlo,monospace;letter-spacing:.12em;
         text-transform:uppercase;color:#8a8578}
   .n .v{font-size:27px;font-weight:700;letter-spacing:-.02em;margin-top:7px}
@@ -63,6 +69,9 @@
   .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:8px;
        vertical-align:1px}
   .dm{background:#7fb3ff}.dd{background:#5aa06f}
+  .thanks{margin-top:16px;font-size:12.5px;line-height:1.55;color:#6f6a5e;
+          border-top:1px solid #efeae1;padding-top:13px}
+  .thanks b{color:#000;font-weight:650}
 
   /* staged reveal: the shot should feel built, not screenshotted */
   .r1,.r2,.r3,.r4,.r5{opacity:0;transform:translateY(9px);
@@ -93,11 +102,19 @@
       sacrificed. For this user it was never capability at all.</p>
     </div>
 
-    <div class="nums r5">
-      <div class="n"><div class="k">model</div>
-        <div class="v"><s>326 MB</s> &nbsp;68.5 MB</div></div>
-      <div class="n"><div class="k">vocoder</div>
-        <div class="v"><s>19.69 M</s> &nbsp;3.76 M</div></div>
+    <div class="teach r5">
+      <p class="eyebrow" style="margin-bottom:10px">Distilled from</p>
+      <p class="kok"><b>Kokoro-82M</b> <span>Apache-2.0</span></p>
+      <p class="small" style="margin-bottom:14px">The gold standard for
+      lightweight TTS. We did not replace it — we specialised it: one voice,
+      re-tuned for Arm CPUs, so it runs faster in less memory on hardware
+      people already own.</p>
+      <div class="nums">
+        <div class="n"><div class="k">model</div>
+          <div class="v"><s>326 MB</s> &nbsp;68.5 MB</div></div>
+        <div class="n"><div class="k">vocoder</div>
+          <div class="v"><s>19.69 M</s> &nbsp;3.76 M</div></div>
+      </div>
     </div>
   </div>
 
@@ -138,6 +155,12 @@
       <div class="chip"><span class="dot dm"></span><b>Apple M1 Max</b> · 8 threads</div>
       <div class="chip"><span class="dot dd"></span><b>DGX Spark GB10</b> · 9 threads</div>
       <div class="chip">no GPU required · no network</div>
+    </div>
+    <div class="thanks r5">
+      <b>Built on open source, with thanks.</b>
+      Kokoro-82M · VITS · HiFi-GAN · ONNX&nbsp;Runtime · espeak-ng · NumPy ·
+      FastAPI · CMU&nbsp;ARCTIC — none of this exists without the people who
+      gave that work away.
     </div>
   </div>
 
