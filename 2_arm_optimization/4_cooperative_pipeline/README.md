@@ -11,7 +11,7 @@ would be the wrong trade.
 | `export_split.py` | splits the trained model into the CPU prefix and the GPU decoder |
 | `benchmark_of_record.py` | the measurement; refuses to run on a busy GPU |
 
-Results: [`../../3_evidence/cooperative_pipeline_dgx_spark.json`](../../3_evidence/cooperative_pipeline_dgx_spark.json)
+Results: [`../../3_evidence/benchmark_of_record_dgx_spark.json`](../../3_evidence/benchmark_of_record_dgx_spark.json)
 
 ---
 

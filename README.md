@@ -50,6 +50,19 @@ cd voiceyog-local-tts-kokoro-heart-new-*
 bash install.sh && bash start.sh
 ```
 
+The two packages are **[release assets](https://github.com/dlyog/voiceyog-arm/releases/latest)**,
+not files in this repository — both exceed GitHub's 100 MB per-file limit, and
+Git LFS bills bandwidth per download. Checksums are committed in
+[`1_packages/SHA256SUMS`](1_packages/SHA256SUMS).
+
+| target | hardware | size |
+|---|---|---|
+| `apple-silicon` | macOS 13+ on M-series | 171 MB |
+| `dgx-spark` | aarch64 Linux, DGX Spark GB10 | 154 MB |
+
+**Architecture at a glance:** [`ARCHITECTURE.html`](ARCHITECTURE.html) — the
+pipeline, the split point, and what runs where.
+
 ---
 
 ## Why one voice

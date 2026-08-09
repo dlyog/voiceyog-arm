@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VoiceYog — architecture</title>
+<style>
+  /* Sized for the video frame the rest of the demo uses: 1920 x 666.
+     Black on white, rust accent only for labels -- the same palette as the
+     VoiceYog console, so the intro and the app look like one product. */
+  *{box-sizing:border-box}
+  html,body{margin:0;width:1920px;height:666px;background:#fff;color:#000;overflow:hidden;
+    font:16px/1.5 -apple-system,"SF Pro Text",Inter,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{display:flex;height:666px}
+
+  /* ---- left: the problem ---- */
+  .left{width:640px;padding:52px 40px 46px 56px;border-right:1px solid #e6e1d8;
+        display:flex;flex-direction:column}
+  .brand{font-size:30px;font-weight:700;letter-spacing:-.02em;margin:0 0 4px}
+  .brand em{font-style:normal;color:#a2531d}
+  .tag{font-size:14.5px;color:#5f5c50;margin:0 0 26px}
+  .eyebrow{font:600 11px/1 "SF Mono",Menlo,monospace;letter-spacing:.16em;
+           text-transform:uppercase;color:#a2531d;margin:0 0 14px}
+  .p{font-size:19px;line-height:1.45;margin:0 0 14px;letter-spacing:-.01em}
+  .p b{font-weight:650}
+  .small{font-size:14.5px;color:#5f5c50;line-height:1.5;margin:0}
+  .rule{height:1px;background:#e6e1d8;margin:22px 0}
+
+  .nums{display:flex;gap:34px;margin-top:auto}
+  .n .k{font:600 10.5px/1 "SF Mono",Menlo,monospace;letter-spacing:.12em;
+        text-transform:uppercase;color:#8a8578}
+  .n .v{font-size:27px;font-weight:700;letter-spacing:-.02em;margin-top:7px}
+  .n .v s{text-decoration:none;color:#b9b3a6;font-weight:500;font-size:19px}
+
+  /* ---- right: the pipeline ---- */
+  .right{flex:1;padding:44px 56px 40px 48px;display:flex;flex-direction:column}
+  .lane{display:flex;align-items:stretch;gap:0;margin:auto 0}
+  .zone{border-radius:14px;padding:20px 22px 18px}
+  .cpu{background:#fbf3ec;border:1px solid #eeddcd;flex:1}
+  .gpu{background:#f4f5f6;border:1px solid #e3e5e7;width:290px;margin-left:78px}
+  .ztitle{font:600 11px/1 "SF Mono",Menlo,monospace;letter-spacing:.13em;
+          text-transform:uppercase;color:#a2531d;margin-bottom:16px}
+  .gpu .ztitle{color:#6b7076}
+  .row{display:flex;align-items:center;gap:12px}
+  .box{background:#fff;border:1px solid #e0d9cd;border-radius:10px;
+       padding:12px 16px;text-align:center;min-width:132px}
+  .gpu .box{border-color:#a2531d;border-width:1.5px}
+  .box .t{font-size:15.5px;font-weight:650;letter-spacing:-.01em}
+  .box .s{font:11.5px/1 "SF Mono",Menlo,monospace;color:#6f6a5e;margin-top:6px}
+  .arr{color:#b0a99b;font-size:17px;flex:none}
+  .meta{font:11.5px/1.5 "SF Mono",Menlo,monospace;color:#6f6a5e;margin-top:14px}
+
+  .split{position:relative;width:0;border-left:2px dashed #a2531d;margin:0 38px}
+  .split span{position:absolute;left:50%;transform:translateX(-50%);bottom:-26px;
+              font:600 10px/1 "SF Mono",Menlo,monospace;letter-spacing:.13em;
+              text-transform:uppercase;color:#a2531d;white-space:nowrap}
+  .z{position:absolute;left:50%;transform:translateX(-50%);top:-20px;
+     font:12px/1 "SF Mono",Menlo,monospace;color:#a2531d}
+
+  .foot{margin-top:auto;display:flex;gap:12px;align-items:center}
+  .chip{border:1px solid #ded7cb;border-radius:999px;padding:7px 15px;font-size:13.5px}
+  .chip b{font-weight:650}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:8px;
+       vertical-align:1px}
+  .dm{background:#7fb3ff}.dd{background:#5aa06f}
+
+  /* staged reveal: the shot should feel built, not screenshotted */
+  .r1,.r2,.r3,.r4,.r5{opacity:0;transform:translateY(9px);
+       animation:in .62s cubic-bezier(.2,.7,.3,1) forwards}
+  .r1{animation-delay:.25s}.r2{animation-delay:1.5s}.r3{animation-delay:3.6s}
+  .r4{animation-delay:6.4s}.r5{animation-delay:9.0s}
+  @keyframes in{to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="left">
+    <div class="r1">
+      <p class="brand">Voice<em>Yog</em></p>
+      <p class="tag">one voice, one language, running on Arm</p>
+    </div>
+
+    <div class="r2">
+      <p class="eyebrow">The problem</p>
+      <p class="p">Every text-to-speech model ships <b>a dozen voices you will
+      never use</b>.</p>
+      <p class="p">If you have banked your own voice — before illness takes it,
+      or simply because it is yours — you need <b>exactly one</b>. Forever. On
+      hardware you own, offline.</p>
+      <div class="rule"></div>
+      <p class="small">So the multi-voice machinery is not capability being
+      sacrificed. For this user it was never capability at all.</p>
+    </div>
+
+    <div class="nums r5">
+      <div class="n"><div class="k">model</div>
+        <div class="v"><s>326 MB</s> &nbsp;68.5 MB</div></div>
+      <div class="n"><div class="k">vocoder</div>
+        <div class="v"><s>19.69 M</s> &nbsp;3.76 M</div></div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="r3">
+      <p class="eyebrow">One graph, split at one line of <span
+         style="font-family:'SF Mono',Menlo,monospace;text-transform:none;
+         letter-spacing:0">infer()</span></p>
+    </div>
+
+    <div class="lane r4">
+      <div class="zone cpu">
+        <div class="ztitle">Arm CPU · ONNX Runtime</div>
+        <div class="row">
+          <div class="box"><div class="t">espeak-ng</div><div class="s">phonemes</div></div>
+          <div class="arr">→</div>
+          <div class="box"><div class="t">encoder</div><div class="s">enc_p</div></div>
+          <div class="arr">→</div>
+          <div class="box"><div class="t">duration + flow</div><div class="s">dp · flow</div></div>
+        </div>
+        <div class="meta">small, sequential, latency-bound — <b>57.4%</b> of every utterance</div>
+      </div>
+
+      <div class="split"><span class="z">z</span><span>split point</span></div>
+
+      <div class="zone gpu">
+        <div class="ztitle">vocoder</div>
+        <div class="row" style="justify-content:center">
+          <div class="box"><div class="t">HiFi-GAN</div><div class="s">3.76 M params</div></div>
+        </div>
+        <div class="meta" style="text-align:center">dense convolution ·
+          24 kHz<br>runs on the <b>Arm CPU</b> too —<br>or hands off to the GPU
+          in <b>0.12 ms</b></div>
+      </div>
+    </div>
+
+    <div class="foot r5">
+      <div class="chip"><span class="dot dm"></span><b>Apple M1 Max</b> · 8 threads</div>
+      <div class="chip"><span class="dot dd"></span><b>DGX Spark GB10</b> · 9 threads</div>
+      <div class="chip">no GPU required · no network</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

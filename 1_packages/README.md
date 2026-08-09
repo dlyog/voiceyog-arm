@@ -15,7 +15,8 @@ bash download.sh --target dgx-spark     # or ask for one explicitly
 | `apple-silicon` | macOS 13+ on M-series | 171 MB |
 | `dgx-spark` | aarch64 Linux, DGX Spark GB10 | 154 MB |
 
-Or take them straight from [Releases](../../releases/latest) and check them
+Or take them straight from
+[Releases](https://github.com/dlyog/voiceyog-arm/releases/latest) and check them
 against [`SHA256SUMS`](SHA256SUMS) yourself.
 
 ## What is inside
