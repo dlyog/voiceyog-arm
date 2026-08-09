@@ -10,6 +10,18 @@ less memory** on the same Arm CPU.
 
 **No GPU. No CUDA. No PyTorch at inference. No network.**
 
+> **Challenge track: Mobile AI** — on-device inference. This runs entirely on
+> the CPU of a machine you already own, offline, in 356 MB of RAM. No cloud
+> endpoint, no accelerator, no subscription.
+>
+> **Built during the challenge period.** The Arm thread-tuning work, the
+> topology utility, the two downloadable packages, `manage.sh`, the benchmark
+> of record, the INT8 test, the Arm Performix profile, the claim-checker and
+> the demo video were all created and measured during the challenge, on an
+> NVIDIA DGX Spark and an Apple M1 Max. It builds on my earlier VoiceYog work
+> — the distillation pipeline and the trained voice — which is credited
+> throughout and linked below.
+
 ---
 
 ## Start here
