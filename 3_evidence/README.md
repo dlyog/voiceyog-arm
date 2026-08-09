@@ -22,6 +22,7 @@ measurement here. Exit 1 names the ones that are not.
 | `fresh_install_dgx_spark.txt` | a clean unzip and offline install, verbatim |
 | `fresh_install_apple_silicon.txt` | the same, on the Mac |
 | `kleidiai_symbol_scan.json` | symbol counts for KleidiAI in the shipped runtime and in a newer one |
+| `arm_performix_profile_dgx_spark.json` | Arm Performix `code_hotspots`, 41,593 samples — where Arm CPU time actually goes |
 
 All measurements are on **kokoro-heart-new v3**, `sha256 63ec62a3…`, which is
 the model inside both downloadable packages. The benchmark records its own

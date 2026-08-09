@@ -10,6 +10,7 @@ checks the writeup against.
 | `2_thread_sweep.py` | an installed bundle | How many threads should ONNX Runtime get, and what does the wrong answer cost? |
 | `3_int8_negative_result.py` | + `pip install onnx` | Should I quantize? |
 | `4_cooperative_pipeline/` | DGX Spark, torch + CUDA | Can the Arm CPU and the GPU split one utterance? |
+| `5_profile_with_performix.py` | Arm Performix CLI | Where does the Arm CPU time actually go? |
 
 ```bash
 B=../1_packages/voiceyog-local-tts-kokoro-heart-new-apple-silicon-1.0.0
@@ -168,3 +169,45 @@ audio alone — a cooperative split, not request routing.
 model on CUDA beats splitting one. What the split buys is meaningful Arm CPU
 participation at GPU-class latency in 1.8× less memory. I report it that way
 because the alternative is the "3× faster" number that turned out to be 1.77×.
+
+---
+
+## 5 — Where the Arm CPU time actually goes
+
+Tuning ONNX Runtime's thread count is only worth doing if ONNX Runtime is where
+the cycles are. That is a claim about where time goes, so it is measured with
+Arm's own profiler rather than inferred from wall-clock timings.
+
+[Arm Performix](https://developer.arm.com/documentation/109842/latest/),
+`code_hotspots` recipe, 41,593 samples of pure Arm-CPU synthesis on a DGX Spark
+GB10:
+
+| share | image |
+|---|---|
+| **94.0%** | ONNX Runtime — fused CPU kernels |
+| 3.1% | OpenBLAS |
+| 2.0% | libc |
+| 0.3% | espeak-ng |
+| 0.2% | Python |
+
+**Almost nothing is interpreter overhead**, which is the result that makes the
+thread sweep meaningful: the knob is attached to 94% of the workload rather
+than to a wrapper around it.
+
+```bash
+python3 5_profile_with_performix.py            # profile and report
+python3 5_profile_with_performix.py --list     # past runs
+python3 5_profile_with_performix.py --run-id <id>
+```
+
+**Honest limitation:** ONNX Runtime ships stripped, so samples inside it
+resolve to `<Unknown code in onnxruntime...>` rather than to individual
+kernels. Image-level attribution is still meaningful — it separates fused
+kernels from Python, libc and the phonemizer — but per-kernel names would need
+a symbolised build.
+
+**A caution from doing this.** An earlier run of this profile attributed 93% of
+the time to scipy's OpenBLAS, which would have contradicted everything above.
+It had profiled a different workload. The run recorded here samples the shipped
+v3 model through the same CPU engine the packages use, and its run id is in the
+JSON so it can be re-exported and checked.

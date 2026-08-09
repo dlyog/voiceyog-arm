@@ -19,7 +19,7 @@ Three things, in this order. The first two need nothing installed.
 | | | time |
 |---|---|---|
 | **1** | ▶️ **[Watch the demo](demo/voiceyog-arm-demo.mp4)** — Apple M1 Max and DGX Spark side by side. Every word of the narration is spoken by the model itself, on an Arm CPU. | 3 min |
-| **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 33 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
+| **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 37 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
 | **3** | ⚡ `bash manage.sh install` — clean machine to a talking server. | 2 min |
 
 📐 **[ARCHITECTURE.html](ARCHITECTURE.html)** — the whole design in one picture.
@@ -145,6 +145,32 @@ GB10, 8 on M1 Max.
 > clusters. `taskset -c 5-14` reads exactly like "pin to the fast half" and
 > lands five of ten threads on efficiency cores.
 
+### Where the Arm CPU time actually goes
+
+Tuning ONNX Runtime's threads only matters if ONNX Runtime is where the time
+is. That is a claim about cycles, so I measured it with Arm's own profiler —
+[**Arm Performix**](https://developer.arm.com/documentation/109842/latest/),
+`code_hotspots` recipe, 41,593 samples on a DGX Spark GB10:
+
+| share | image |
+|---|---|
+| **94.0%** | ONNX Runtime — fused CPU kernels |
+| 3.1% | OpenBLAS |
+| 2.0% | libc |
+| 0.3% | espeak-ng · 0.2% Python |
+
+**Almost nothing is interpreter overhead.** That is what makes the thread
+result meaningful: the knob is attached to 94% of the workload, not to a thin
+wrapper around it. Reproduce it with
+[`5_profile_with_performix.py`](2_arm_optimization/5_profile_with_performix.py);
+raw output in
+[`3_evidence/arm_performix_profile_dgx_spark.json`](3_evidence/arm_performix_profile_dgx_spark.json).
+
+ONNX Runtime ships stripped, so samples inside it resolve to `<Unknown code>`
+rather than individual kernels. Image-level attribution is still meaningful;
+per-kernel names would need a symbolised build.
+
+
 ---
 
 ## Results
@@ -183,7 +209,7 @@ Every utterance uses both processors; neither can produce audio alone.
 python3 3_evidence/verify_claims.py
 ```
 
-No dependencies, no model, no network. It checks **all 33 figures** in this
+No dependencies, no model, no network. It checks **all 37 figures** in this
 README and `SUBMISSION.md` against the JSON the measurement scripts wrote, and
 exits non-zero if any disagree.
 

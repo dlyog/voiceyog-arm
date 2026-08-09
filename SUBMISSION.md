@@ -5,6 +5,12 @@
 **Tarun Kumar Chawdhury** · DLYog Lab Research Services LLC · Apache 2.0
 NVIDIA DGX Spark (GB10) + Apple Silicon · 2026
 
+**Everything here was built on Arm.** The model was fine-tuned on an NVIDIA DGX
+Spark — a 20-core Grace Arm CPU beside a Blackwell GPU — and the benchmark of
+record, the thread sweep, the INT8 test and the Arm Performix profile were all
+run on that same machine. Apple Silicon is the second target it was proven to
+carry to, not where it was made.
+
 A 326 MB multi-voice text-to-speech model, distilled to **68.5 MB** for a
 single voice, then tuned for the asymmetric Arm CPUs it actually runs on.
 
@@ -96,6 +102,22 @@ asking for 20 runnable threads puts **at least 10 on efficiency cores by
 pigeonhole**, however good the scheduler is. Ask for 9 and none is forced
 there. You are not steering placement; you are removing the guarantee of bad
 placement.
+
+
+**Where the Arm CPU time actually goes.** Tuning ONNX Runtime's threads only
+matters if ONNX Runtime is where the time is, so I measured it with Arm's own
+profiler — **Arm Performix**, `code_hotspots`, 41,593 samples on the GB10:
+
+| share | image |
+|---|---|
+| **94.0%** | ONNX Runtime — fused CPU kernels |
+| 3.1% | OpenBLAS |
+| 2.0% | libc |
+| 0.3% | espeak-ng · 0.2% Python |
+
+Almost nothing is interpreter overhead, which is what makes the thread result
+meaningful — the knob is attached to 94% of the workload. Reproduce with
+`2_arm_optimization/5_profile_with_performix.py`.
 
 ### 2.3 The pipeline — the Arm CPU doing the majority of the work
 
@@ -191,7 +213,7 @@ The first thing to run needs nothing at all:
 ```bash
 python3 3_evidence/verify_claims.py
 
-  All 33 claims are backed by the measurements in this directory.
+  All 37 claims are backed by the measurements in this directory.
 ```
 
 No dependencies, no model, no network. It checks every figure in this document

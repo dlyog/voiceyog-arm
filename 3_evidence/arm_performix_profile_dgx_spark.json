@@ -1,0 +1,236 @@
+{
+  "tool": "Arm Performix",
+  "recipe": "code_hotspots",
+  "run_id": "a7dafddbca41",
+  "total_samples": 41593,
+  "images": [
+    {
+      "image": "onnxruntime_pybind11_state.cpython-312-aarch64-linux-gnu.so",
+      "samples": 39078,
+      "percent": 93.95
+    },
+    {
+      "image": "libscipy_openblas64_-7220728c.so",
+      "samples": 1273,
+      "percent": 3.06
+    },
+    {
+      "image": "libc.so.6",
+      "samples": 822,
+      "percent": 1.98
+    },
+    {
+      "image": "ld-linux-aarch64.so.1",
+      "samples": 139,
+      "percent": 0.33
+    },
+    {
+      "image": "libespeak-ng.so.1.1.51",
+      "samples": 131,
+      "percent": 0.31
+    },
+    {
+      "image": "python",
+      "samples": 92,
+      "percent": 0.22
+    },
+    {
+      "image": "libstdc++.so.6.0.33",
+      "samples": 45,
+      "percent": 0.11
+    },
+    {
+      "image": "_multiarray_umath.cpython-312-aarch64-linux-gnu.so",
+      "samples": 4,
+      "percent": 0.01
+    },
+    {
+      "image": "libm.so.6",
+      "samples": 2,
+      "percent": 0.0
+    },
+    {
+      "image": "libX11.so.6.4.0",
+      "samples": 2,
+      "percent": 0.0
+    },
+    {
+      "image": "espeak-ng",
+      "samples": 1,
+      "percent": 0.0
+    },
+    {
+      "image": "libpulsecommon-16.1.so",
+      "samples": 1,
+      "percent": 0.0
+    },
+    {
+      "image": "libpulse.so.0.24.2",
+      "samples": 1,
+      "percent": 0.0
+    },
+    {
+      "image": "libcap.so.2.66",
+      "samples": 1,
+      "percent": 0.0
+    },
+    {
+      "image": "libasound.so.2.0.0",
+      "samples": 1,
+      "percent": 0.0
+    }
+  ],
+  "functions": [
+    {
+      "function": "<Unknown code in onnxruntime_pybind11_state.cpython-312-aarch64-linux-gnu.so>",
+      "image": "onnxruntime_pybind11_state.cpython-312-aarch64-linux-gnu.so",
+      "samples": 39063,
+      "percent": 93.92
+    },
+    {
+      "function": "blas_thread_server",
+      "image": "libscipy_openblas64_-7220728c.so",
+      "samples": 1273,
+      "percent": 3.06
+    },
+    {
+      "function": "__memcpy_sve",
+      "image": "libc.so.6",
+      "samples": 121,
+      "percent": 0.29
+    },
+    {
+      "function": "Unknown symbol @ 0x00032d40",
+      "image": "libespeak-ng.so.1.1.51",
+      "samples": 97,
+      "percent": 0.23
+    },
+    {
+      "function": "__aarch64_cas8_rel",
+      "image": "libc.so.6",
+      "samples": 78,
+      "percent": 0.19
+    },
+    {
+      "function": "__aarch64_swp4_rel",
+      "image": "libc.so.6",
+      "samples": 74,
+      "percent": 0.18
+    },
+    {
+      "function": "__libc_read",
+      "image": "libc.so.6",
+      "samples": 48,
+      "percent": 0.12
+    },
+    {
+      "function": "__mmap",
+      "image": "ld-linux-aarch64.so.1",
+      "samples": 43,
+      "percent": 0.1
+    },
+    {
+      "function": "__aarch64_cas4_acq",
+      "image": "libc.so.6",
+      "samples": 42,
+      "percent": 0.1
+    },
+    {
+      "function": "__GI___futex_abstimed_wait_cancelable64",
+      "image": "libc.so.6",
+      "samples": 36,
+      "percent": 0.09
+    },
+    {
+      "function": "__fstatat",
+      "image": "libc.so.6",
+      "samples": 34,
+      "percent": 0.08
+    },
+    {
+      "function": "isspace",
+      "image": "libc.so.6",
+      "samples": 32,
+      "percent": 0.08
+    },
+    {
+      "function": "std::_Hash_bytes(void const*, unsigned long, unsigned long)",
+      "image": "libstdc++.so.6.0.33",
+      "samples": 32,
+      "percent": 0.08
+    },
+    {
+      "function": "_int_free",
+      "image": "libc.so.6",
+      "samples": 29,
+      "percent": 0.07
+    },
+    {
+      "function": "_int_malloc",
+      "image": "libc.so.6",
+      "samples": 29,
+      "percent": 0.07
+    },
+    {
+      "function": "__GI___libc_malloc",
+      "image": "libc.so.6",
+      "samples": 28,
+      "percent": 0.07
+    },
+    {
+      "function": "__mprotect",
+      "image": "ld-linux-aarch64.so.1",
+      "samples": 27,
+      "percent": 0.06
+    },
+    {
+      "function": "__libc_vfork",
+      "image": "libc.so.6",
+      "samples": 24,
+      "percent": 0.06
+    },
+    {
+      "function": "__GI___memcmpeq",
+      "image": "libc.so.6",
+      "samples": 24,
+      "percent": 0.06
+    },
+    {
+      "function": "__GI___munmap",
+      "image": "libc.so.6",
+      "samples": 21,
+      "percent": 0.05
+    },
+    {
+      "function": "__GI___close_nocancel",
+      "image": "libc.so.6",
+      "samples": 20,
+      "percent": 0.05
+    },
+    {
+      "function": "__free",
+      "image": "libc.so.6",
+      "samples": 19,
+      "percent": 0.05
+    },
+    {
+      "function": "__libc_open64",
+      "image": "libc.so.6",
+      "samples": 19,
+      "percent": 0.05
+    },
+    {
+      "function": "_PyEval_EvalFrameDefault",
+      "image": "python",
+      "samples": 15,
+      "percent": 0.04
+    },
+    {
+      "function": ".plt",
+      "image": "onnxruntime_pybind11_state.cpython-312-aarch64-linux-gnu.so",
+      "samples": 13,
+      "percent": 0.03
+    }
+  ],
+  "note": "ONNX Runtime ships stripped, so samples inside it resolve to '<Unknown code>' rather than individual kernels. Image-level attribution is still meaningful."
+}

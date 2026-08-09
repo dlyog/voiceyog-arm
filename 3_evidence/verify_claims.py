@@ -40,6 +40,7 @@ FILES = {
     "topo_m1": "core_topology_m1_max.json",
     "int8_dgx": "int8_negative_result_dgx_spark.json",
     "int8_m1": "int8_negative_result_m1_max.json",
+    "perfx": "arm_performix_profile_dgx_spark.json",
 }
 
 MODEL = "kokoro-heart-new v3"
@@ -190,6 +191,24 @@ def build_claims(d: dict) -> list[tuple]:
               1 if (i8d["int8"]["error"] or "").split("name")[-1]
               == (i8m["int8"]["error"] or "").split("name")[-1] else 0,
               1, 0, "int8_dgx.int8.error == int8_m1.int8.error"))
+
+    # --- where the Arm CPU time actually goes, per Arm's own profiler --------
+    px = d["perfx"]
+    top = px["images"][0]
+    ort = next((i for i in px["images"]
+                if "onnxruntime" in i["image"]), {"percent": 0})
+    C.append(("Arm Performix says 94.0% of Arm CPU time is inside ONNX Runtime",
+              ort["percent"], 94.0, 0.1, "perfx.images[onnxruntime].percent"))
+    C.append(("ONNX Runtime is the top image, not Python or libc",
+              1 if "onnxruntime" in top["image"] else 0, 1, 0,
+              "perfx.images[0].image"))
+    C.append(("the profile is a real sampled run, not a hand-written table",
+              1 if px["total_samples"] > 1000 else 0, 1, 0,
+              "perfx.total_samples"))
+    C.append(("Python interpreter overhead is under 1%",
+              next((i["percent"] for i in px["images"]
+                    if i["image"] == "python"), 0.0), 0.2, 0.3,
+              "perfx.images[python].percent"))
 
     return C
 

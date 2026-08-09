@@ -103,6 +103,10 @@ word. Files are in `side_by_side/scenes/`, voice-over wavs in
 > J SON file, and this checker fails if the two disagree. Thirty three claims,
 > both machines, no dependencies, no network.
 
+*The audio says thirty-three because that was the count when this was recorded.
+Adding the Arm Performix profile as evidence took it to **37**. The transcript
+is left matching the audio rather than edited to disagree with it.*
+
 ### 11 — `11_core_topology`
 > Here is what is being optimized. Both are asymmetric Arm parts. This reads the
 > core layout from the hardware registers rather than guessing from a core
