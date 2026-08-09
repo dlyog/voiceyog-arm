@@ -22,6 +22,25 @@ less memory** on the same Arm CPU.
 > — the distillation pipeline and the trained voice — which is credited
 > throughout and linked below.
 
+
+---
+
+## Demo
+
+[![Watch the demo — Apple M1 Max and DGX Spark side by side](demo/thumbnail.png)](https://youtu.be/Aw3xoq2rTG0)
+
+**▶ [youtu.be/Aw3xoq2rTG0](https://youtu.be/Aw3xoq2rTG0)** — 3 minutes. Apple M1
+Max on the left, NVIDIA DGX Spark GB10 on the right, running the same repository
+and the same commands.
+
+Watch the SERVER panel in both: same model, same version, same 68.5 MB — and the
+Mac loads **8 threads** while the DGX Spark loads **9**. Nothing was configured.
+That number is the optimization, and it is read off the silicon at startup.
+
+**Every word of the narration is spoken by the model itself**, on an Arm CPU,
+with no GPU and no network. Transcript: [`demo/TRANSCRIPT.md`](demo/TRANSCRIPT.md).
+The file is also in this repo at [`demo/voiceyog-arm-demo.mp4`](demo/voiceyog-arm-demo.mp4).
+
 ---
 
 ## Start here
@@ -30,7 +49,7 @@ Three things, in this order. The first two need nothing installed.
 
 | | | time |
 |---|---|---|
-| **1** | ▶️ **[Watch the demo](demo/voiceyog-arm-demo.mp4)** — Apple M1 Max and DGX Spark side by side. Every word of the narration is spoken by the model itself, on an Arm CPU. | 3 min |
+| **1** | ▶️ **[Watch the demo](https://youtu.be/Aw3xoq2rTG0)** — Apple M1 Max and DGX Spark side by side. Every word of the narration is spoken by the model itself, on an Arm CPU. | 3 min |
 | **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 37 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
 | **3** | ⚡ `bash manage.sh install` — clean machine to a talking server. | 2 min |
 
