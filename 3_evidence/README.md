@@ -21,11 +21,12 @@ measurement here. Exit 1 names the ones that are not.
 | `core_topology_m1_max.json` | the same script, read from `hw.perflevel*` |
 | `fresh_install_dgx_spark.txt` | a clean unzip and offline install, verbatim |
 | `fresh_install_apple_silicon.txt` | the same, on the Mac |
+| `kleidiai_symbol_scan.json` | symbol counts for KleidiAI in the shipped runtime and in a newer one |
 
 All measurements are on **kokoro-heart-new v3**, `sha256 63ec62a3…`, which is
 the model inside both downloadable packages. The benchmark records its own
 checkpoint path and the GPU utilisation at start, so you can tell whether the
-run was clean without taking our word for it.
+run was clean without taking my word for it.
 
 ## Why this directory exists
 

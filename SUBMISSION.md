@@ -89,7 +89,7 @@ topology and can only be read off the hardware.
 > An earlier version of this code counted cores per MIDR and called the largest
 > group "performance". With exactly ten of each, that was right only by luck.
 
-**How the threads actually land.** We choose the count; we do not place the
+**How the threads actually land.** I choose the count; I do not place the
 threads — ONNX Runtime sets no affinity here and Linux does the placing. The
 reason the count matters is arithmetic: there are 10 performance cores, so
 asking for 20 runnable threads puts **at least 10 on efficiency cores by
@@ -152,7 +152,7 @@ GPU-class latency (42.2 ms against 40.1 ms) in **1.8× less memory**.
 
 ---
 
-## 4. The optimization we did not ship
+## 4. The optimization I did not ship
 
 INT8 dynamic quantization is the reflex answer for Arm. On this graph it does
 not merely lose — **the quantized model will not load at all**, on both
@@ -206,7 +206,7 @@ $B/.venv/bin/python3 2_arm_optimization/2_thread_sweep.py --json sweep.json
 ```
 
 The sweep takes about a minute and prints the tuning table for the machine in
-front of you. It will contradict us if we are wrong.
+front of you. It will contradict me if I am wrong.
 
 Both packages were installed from a clean extraction on real hardware before
 submission — offline, from bundled wheels — and the transcripts ship in
@@ -219,7 +219,7 @@ fresh_install_dgx_spark.txt       102 checksums · 32 wheels, no network · 9 th
 
 ### What building this submission found
 
-Preparing the packages is how we discovered the shipped DGX build was running
+Preparing the packages is how I discovered the shipped DGX build was running
 at **20 threads**: `tuned_threads()` returned `os.cpu_count()` on Linux, under
 a docstring asserting "on DGX OS every core is the same". That is false, and it
 cost 1.39×. Fixed, and verified on the box:
@@ -246,7 +246,7 @@ claim-checker reads.
 | `3_int8_negative_result.py` | + `onnx` | Should I quantize *here*? |
 | `4_cooperative_pipeline/` | DGX Spark, torch + CUDA | Can the CPU and GPU split one utterance? |
 
-`1_core_topology.py` is the one we would most want taken. "How many threads
+`1_core_topology.py` is the one I would most want someone to take. "How many threads
 should ONNX Runtime get" comes up for **every** ONNX workload on **every**
 asymmetric Arm part, and the honest answer is always read off `MIDR_EL1` and
 `cpu_capacity` rather than from `nproc`.
@@ -265,9 +265,13 @@ asymmetric Arm part, and the honest answer is always read off `MIDR_EL1` and
   pipeline and runs strictly before the GPU stage, so each processor idles
   while the other works. Overlapping `prefix(N+1)` with `decode(N)` is the
   largest remaining win. Designed, not built, not claimed.
-- **KleidiAI is absent** from the ONNX Runtime build used here (0 symbols).
-  Arm's optimized matmul kernels would accelerate exactly the CPU prefix that
-  is now the bottleneck.
+- **KleidiAI is absent from the runtime I pin, and present in a newer one.**
+  The packages ship onnxruntime 1.20.1, which contains **0** KleidiAI symbols
+  on either target. onnxruntime 1.28.0 on the same DGX Spark contains **11**
+  `kai_run_matmul_*` symbols. Arm's optimized matmul kernels would accelerate
+  exactly the CPU prefix that is now the bottleneck, so upgrading the pinned
+  runtime is a concrete measurable next step rather than a wish — I have not
+  measured it, so I am not claiming it.
 - **Thread placement is inferred, not observed.** The topology and the latency
   curve are measured; which physical core each thread ran on is not. The
   pigeonhole argument in §2.2 holds regardless, but the causal story is

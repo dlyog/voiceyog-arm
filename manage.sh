@@ -19,7 +19,7 @@
 #
 # It deliberately does NOT reimplement the bundle's installer. Two installers
 # that drift apart is how "works on my machine" happens, and the bundle's is
-# the one a judge runs directly if they skip this script.
+# the one that runs directly if you skip this script.
 set -uo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

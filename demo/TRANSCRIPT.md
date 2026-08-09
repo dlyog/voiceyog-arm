@@ -35,25 +35,25 @@ One graph, one binary, retuned per Arm part. In one frame.
 
 ---
 
-## Scene-by-scene, mapped to the rubric
+## Scene-by-scene
 
 Text below is exactly what was synthesized, so it matches the audio word for
 word. Files are in `side_by_side/scenes/`, voice-over wavs in
 `side_by_side/voiceover/`.
 
-| # | scene | length | rubric criterion it serves |
+| # | scene | length | what it is there to show |
 |---|---|---|---|
-| 1 | `01_install_espeak` | 17.2 s | framing — sets up that the voice *is* the model |
-| 2 | `02_clone_repo` | 9.8 s | developer experience |
+| 1 | `01_install_espeak` | 17.2 s | framing — the voice you hear *is* the model |
+| 2 | `02_clone_repo` | 9.8 s | the repo is small and code-only |
 | 3 | `03_manage_install` | 17.2 s | **reproducibility** — fresh environment, offline |
-| 4 | `04_open_browser` | 13.6 s | **technical implementation + wow** |
-| 5 | `05_browser_synthesize` | 12.2 s | **Arm CPU participation** |
-| 6 | `06_browser_provenance` | 14.7 s | impact — responsible cloning |
-| 7 | `07_browser_tamper` | 7.0 s | engineering soundness |
-| 8 | `08_manage_status` | 6.4 s | developer experience |
-| 9 | `09_manage_demo` | 6.0 s | developer experience |
-| 10 | `10_verify_claims` | 13.5 s | **independent verification** |
-| 11 | `11_core_topology` | 18.9 s | **why it is an Arm optimization** |
+| 4 | `04_open_browser` | 13.6 s | **the 8-vs-9 reveal** — same model, different silicon |
+| 5 | `05_browser_synthesize` | 12.2 s | **the Arm CPU is the deployment target** |
+| 6 | `06_browser_provenance` | 14.7 s | responsible cloning |
+| 7 | `07_browser_tamper` | 7.0 s | the signature fails when it should |
+| 8 | `08_manage_status` | 6.4 s | 8 threads vs 9, from the CLI |
+| 9 | `09_manage_demo` | 6.0 s | synthesis without the browser |
+| 10 | `10_verify_claims` | 13.5 s | **anyone can check the numbers** |
+| 11 | `11_core_topology` | 18.9 s | **why this is specifically an Arm optimization** |
 | 12 | `12_thread_sweep` | 22.4 s | **what changed, and what it is worth** |
 
 ### 1 — `01_install_espeak`

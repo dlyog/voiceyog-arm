@@ -14,8 +14,8 @@ carried by hand out of its context and stopped being true. This script exists
 so that cannot happen quietly again: it exits non-zero the moment a claim and
 its evidence disagree.
 
-Judges: run this first. Python 3 and nothing else -- no model, no virtualenv,
-no network.
+Run this first. Python 3 and nothing else -- no model, no virtualenv, and no
+network.
 
     python3 verify_claims.py
     python3 verify_claims.py --show     # every claim with its measured value

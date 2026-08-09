@@ -1,7 +1,7 @@
 """
 The single source of truth for every DGX Spark number in the submission.
 
-Design rules, because the judges have said they will run this themselves:
+Design rules, because this is meant to be re-run by someone else:
 
   * Nothing is hard-coded. Every figure in the writeup comes from
     results.json, which this produces.

@@ -1,0 +1,23 @@
+{
+  "measured_at": "2026-08-09 UTC",
+  "method": "strings <onnxruntime_pybind11_state*.so> | grep -c ; strings catches statically linked symbols that nm -D on the dynamic table misses",
+  "shipped_runtime": {
+    "version": "1.20.1",
+    "note": "pinned in the packages, both targets",
+    "apple_silicon": {
+      "kai_run_matmul": 0,
+      "kleidi": 0
+    },
+    "dgx_spark": {
+      "kai_run_matmul": 0,
+      "kleidi": 0
+    }
+  },
+  "newer_runtime_not_shipped": {
+    "version": "1.28.0",
+    "host": "DGX Spark GB10, aarch64",
+    "kai_run_matmul": 11,
+    "kleidi": 13
+  },
+  "conclusion": "KleidiAI is absent from the runtime this submission ships and present in 1.28.0 on the same hardware. Upgrading the pin is a measurable next step; no speedup is claimed because none was measured."
+}

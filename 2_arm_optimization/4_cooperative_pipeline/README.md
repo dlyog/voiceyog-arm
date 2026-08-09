@@ -68,7 +68,7 @@ ONNX Runtime in this environment has no CUDA provider. Checked, not assumed:
 | Kokoro-82M — Arm CPU | 0.33447 | 947.5 ms | 2661 MB |
 
 **The cooperative path is 0.72× Kokoro-GPU. It is slower.** Running an entire
-model on CUDA beats splitting one across a device boundary, and we are not
+model on CUDA beats splitting one across a device boundary, and I am not
 going to bury that.
 
 What the split does buy, measured on the same box in the same run:

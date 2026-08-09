@@ -85,7 +85,7 @@ GB10, 8 on M1 Max — and the prediction is recorded in the JSON
 
 ### How the threads actually land
 
-We choose the count; we do not place the threads. ONNX Runtime sets no affinity
+I choose the count; I do not place the threads. ONNX Runtime sets no affinity
 here and Linux does the placing. The reason the count matters is arithmetic:
 there are 10 performance cores, so asking for 20 runnable threads puts **at
 least 10 of them on efficiency cores by pigeonhole**, no matter how good the
@@ -98,7 +98,7 @@ utterance and would otherwise preempt an inference thread.
 
 ### This was not a theoretical exercise
 
-Building this submission is how we found that the shipped DGX package ran at
+Building this submission is how I found that the shipped DGX package ran at
 **20 threads**: `tuned_threads()` returned `os.cpu_count()` on Linux, under a
 docstring asserting "on DGX OS every core is the same". That is false, and it
 cost 1.39×. Fixed, and verified on the box:
@@ -112,7 +112,7 @@ An optimization is only real once something measures it.
 
 ---
 
-## 3 — The one we did not ship
+## 3 — The one I did not ship
 
 INT8 dynamic quantization is the reflex answer for Arm, and on this graph it
 does not merely lose — **the quantized model will not load at all**, on either
@@ -166,5 +166,5 @@ audio alone — a cooperative split, not request routing.
 
 **Stated plainly: this path is 0.72× Kokoro-GPU — slower.** Running an entire
 model on CUDA beats splitting one. What the split buys is meaningful Arm CPU
-participation at GPU-class latency in 1.8× less memory. We report it that way
+participation at GPU-class latency in 1.8× less memory. I report it that way
 because the alternative is the "3× faster" number that turned out to be 1.77×.

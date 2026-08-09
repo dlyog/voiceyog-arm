@@ -196,7 +196,7 @@ $B/.venv/bin/python3 2_arm_optimization/2_thread_sweep.py --json sweep.json
 ```
 
 The sweep takes about a minute and prints the tuning table for **your** machine.
-It will contradict us if we are wrong.
+It will contradict me if I am wrong.
 
 ---
 
@@ -220,7 +220,7 @@ on **any** asymmetric Arm part — not just this one, and not just TTS.
 
 ---
 
-## The optimization we did not ship
+## The optimization I did not ship
 
 INT8 dynamic quantization is the reflex answer for Arm. Here the quantized
 model **will not load at all**, on both targets, at the same node:
@@ -252,9 +252,13 @@ Reproduce it: `2_arm_optimization/3_int8_negative_result.py`.
   pipeline and runs strictly before the GPU stage, so each processor idles
   while the other works. Overlapping `prefix(N+1)` with `decode(N)` is the
   largest remaining win. Designed, not built, not claimed.
-- **KleidiAI is absent** from the ONNX Runtime build used here (0 symbols).
-  Arm's optimized matmul kernels would accelerate exactly the CPU prefix that
-  is now the bottleneck.
+- **KleidiAI is absent from the runtime I pin, and present in a newer one.**
+  The packages ship onnxruntime 1.20.1, which contains **0** KleidiAI symbols
+  on either target. onnxruntime 1.28.0 on the same DGX Spark contains **11**
+  `kai_run_matmul_*` symbols. Arm's optimized matmul kernels would accelerate
+  exactly the CPU prefix that is now the bottleneck, so upgrading the pinned
+  runtime is a concrete measurable next step rather than a wish — I have not
+  measured it, so I am not claiming it.
 - **English only, one voice, by design.** Not validated beyond ~6.25 s per
   chunk; longer text is chunked by sentence automatically.
 
@@ -269,15 +273,15 @@ the one to star. It is the gold standard for lightweight TTS — 82 M parameters
 producing audio that much larger models struggle to match — and it is both the
 teacher this model was distilled from and the baseline it is measured against.
 Every comparison in this repository exists because Kokoro was good enough and
-open enough to measure against. **We did not beat Kokoro. We specialised it**,
+open enough to measure against. **I did not beat Kokoro. I specialised it**,
 for one voice on one class of CPU. This work is not affiliated with or endorsed
 by it.
 
-| project | licence | what it gave us |
+| project | licence | what it gave this work |
 |---|---|---|
 | [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) | Apache-2.0 | the teacher voice, the training audio, and the baseline |
 | [VITS](https://github.com/jaywalnut310/vits) | MIT | the student architecture |
-| [HiFi-GAN](https://github.com/jik876/hifi-gan) | MIT | the vocoder our 3.76 M generator is |
+| [HiFi-GAN](https://github.com/jik876/hifi-gan) | MIT | the vocoder the 3.76 M generator is |
 | [ONNX Runtime](https://onnxruntime.ai/) | MIT | the CPU inference engine, and the thread knob this whole submission turns |
 | [espeak-ng](https://github.com/espeak-ng/espeak-ng) | GPL-3.0 | phonemisation — run as a **separate process**, never linked |
 | [NumPy](https://numpy.org/) · [FastAPI](https://fastapi.tiangolo.com/) · [uvicorn](https://www.uvicorn.org/) · [pydantic](https://docs.pydantic.dev/) · [cryptography](https://cryptography.io/) | BSD / MIT / Apache-2.0 | the runtime, the API, and the signatures |

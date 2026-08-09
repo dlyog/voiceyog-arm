@@ -60,10 +60,10 @@ process is auditable:
 | `export_onnx.py` | checkpoint → the 68.5 MB ONNX graph that ships |
 
 **These are deliberately not presented as something to execute.** Training
-needs a GPU, hours of compute, PyTorch and a teacher model. A judge who starts
-it and stalls has learned something misleading about this project, and there is
-no upside to offer against that risk. The runnable, verifiable claims in this
-submission are the thread sweep and the packages.
+needs a GPU, hours of compute, PyTorch and a teacher model. Someone who starts
+it expecting a two-minute demo and stalls has learned something misleading about
+this project, and there is no upside to set against that. The runnable,
+verifiable claims here are the thread sweep and the packages.
 
 ---
 
