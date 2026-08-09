@@ -27,7 +27,7 @@ less memory** on the same Arm CPU.
 
 ## Demo
 
-[![Watch the demo — Apple M1 Max and DGX Spark side by side](https://img.youtube.com/vi/Aw3xoq2rTG0/maxresdefault.jpg)](https://youtu.be/Aw3xoq2rTG0)
+[![Watch the demo — Apple M1 Max and DGX Spark side by side](.github/demo-thumbnail.png)](https://youtu.be/Aw3xoq2rTG0)
 
 **▶ [youtu.be/Aw3xoq2rTG0](https://youtu.be/Aw3xoq2rTG0)** — 3 minutes. Apple M1
 Max on the left, NVIDIA DGX Spark GB10 on the right, running the same repository
