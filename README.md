@@ -11,24 +11,44 @@ its own Python wheels and verifies 102 checksums before it does anything.
 
 ---
 
-## Download and run
+## Three steps, from a clean machine to a voice
 
-| your machine | package | then |
-|---|---|---|
-| **Mac, M-series** | [`…apple-silicon.zip`](../../releases/latest) | `bash install.sh && bash start.sh` |
-| **NVIDIA DGX Spark (GB10)** | [`…dgx-spark.zip`](../../releases/latest) | `bash install.sh && bash start.sh` |
+```bash
+brew install espeak-ng                 # macOS      (sudo apt-get install espeak-ng on Linux)
+git clone https://github.com/dlyog/voiceyog-arm.git && cd voiceyog-arm
+bash manage.sh install
+```
+
+That's it. `install` detects whether you are on Apple Silicon or a DGX Spark,
+downloads the right package, verifies its sha256, unpacks it, runs the bundle's
+own installer (102 more checksums, 32 vendored wheels, **pip never touches the
+network**), starts the server in the background and prints a URL:
+
+```
+  serving            kokoro-heart-new:v3  8 threads  68.5 MB
+  open  http://127.0.0.1:8823
+```
+
+Open it and type something.
+
+```
+bash manage.sh install | start | stop | status | log [N] | demo [text] | uninstall
+```
+
+Prerequisites are checked **before** the 170 MB download, not after — a missing
+phonemizer should cost you two seconds, not two minutes. `espeak-ng` runs as a
+**separate process**, never linked, which keeps its GPL terms out of the
+shipped runtime.
+
+Prefer to do it by hand? The package is self-contained and needs none of the
+above:
 
 ```bash
 bash 1_packages/download.sh          # detects your machine, verifies sha256
 unzip voiceyog-kokoro-heart-new-v3-*.zip
 cd voiceyog-local-tts-kokoro-heart-new-*
-bash install.sh                      # 102 checksums, 32 bundled wheels, offline
-bash start.sh                        # prints a URL — open it
+bash install.sh && bash start.sh
 ```
-
-Requires `espeak-ng` (`brew install espeak-ng` / `sudo apt-get install espeak-ng`).
-It runs as a **separate process**, never linked, which keeps its GPL terms out
-of the shipped runtime.
 
 ---
 
@@ -146,6 +166,7 @@ It will contradict us if we are wrong.
 ## What is here
 
 ```
+manage.sh            install | start | stop | status | log | demo | uninstall
 1_packages/          download.sh + SHA256SUMS   (zips are release assets)
 2_arm_optimization/  the optimization, as scripts you can run
 3_evidence/          every number, in the file that produced it

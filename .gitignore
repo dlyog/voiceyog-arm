@@ -216,3 +216,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- VoiceYog ---------------------------------------------------------------
+# The packages are RELEASE ASSETS, never repository files: both exceed GitHub's
+# 100 MB per-file limit, and Git LFS bills bandwidth per download so a repo with
+# any traffic would stop serving them. manage.sh downloads them to here.
+1_packages/*.zip
+1_packages/*.zip.part
+1_packages/voiceyog-local-tts-*/
+.voiceyog-arm-state
