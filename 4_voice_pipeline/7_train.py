@@ -26,7 +26,7 @@ import sys
 from pathlib import Path
 
 # repo root on the path so `tts` imports as a package
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "3_ExportAndInferenceEngine"))  # the tts package lives there
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # the tts package is vendored beside this script
 
 import argparse
 import json
@@ -116,7 +116,12 @@ def main():
     # Paths in config.json are RELATIVE TO THE REPOSITORY ROOT and resolved
     # here. They used to be absolute paths into the author's own workspace,
     # so training could not start from a fresh clone at all.
-    repo = Path(__file__).resolve().parents[1]
+    # Paths in config.json are relative to this directory. In the parent
+    # project this script sits one level down inside a repo of numbered
+    # stage folders, so it resolved against parents[1]; here every asset it
+    # needs -- the dataset, the phoneme config, the vendored engine -- is
+    # beside the script.
+    repo = Path(__file__).resolve().parent
     for section, keys in (("data", ("csv_path", "audio_dir", "phoneme_config",
                                     "voice_config", "cache_dir")),
                           ("train", ("output_dir", "val_sentences"))):

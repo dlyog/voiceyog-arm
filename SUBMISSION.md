@@ -213,7 +213,7 @@ The first thing to run needs nothing at all:
 ```bash
 python3 3_evidence/verify_claims.py
 
-  All 37 claims are backed by the measurements in this directory.
+  All 43 claims are backed by the measurements in this directory.
 ```
 
 No dependencies, no model, no network. It checks every figure in this document

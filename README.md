@@ -2,26 +2,28 @@
 
 **Tarun Kumar Chawdhury** · DLYog Lab Research Services LLC · Apache 2.0
 
-**[Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)** — the gold standard
-for lightweight TTS — distilled to **one voice** and re-tuned for the asymmetric
-Arm CPUs it actually runs on: the Grace CPU on **NVIDIA DGX Spark (GB10)** and
-**Apple Silicon**. 326 MB becomes **68.5 MB**, and it runs **8.6× faster in 7.5×
-less memory** on the same Arm CPU.
+**[Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)** is the gold standard
+for small text-to-speech. It is also 326 MB, and to run fast it wants a GPU and
+**3.4 GB of memory**.
 
-**No GPU. No CUDA. No PyTorch at inference. No network.**
+Most people only ever use one voice. So on an NVIDIA DGX Spark, using its GPU
+and distillation from Kokoro, I trained a new model **from scratch** — one
+voice, one language, **68.5 MB** — and built an Arm-specific CPU path for it.
 
-> **Challenge track: Mobile AI** — on-device inference. This runs entirely on
-> the CPU of a machine you already own, offline, in 356 MB of RAM. No cloud
-> endpoint, no accelerator, no subscription.
->
-> **Built during the challenge period.** The Arm thread-tuning work, the
-> topology utility, the two downloadable packages, `manage.sh`, the benchmark
-> of record, the INT8 test, the Arm Performix profile, the claim-checker and
-> the demo video were all created and measured during the challenge, on an
-> NVIDIA DGX Spark and an Apple M1 Max. It builds on my earlier VoiceYog work
-> — the distillation pipeline and the trained voice — which is credited
-> throughout and linked below.
+**It runs on any modern Arm CPU. No GPU, no internet, no cloud API.**
 
+| | Kokoro-82M, on a GPU | VoiceYog, on an Arm CPU | |
+|---|---|---|---|
+| memory | 3464 MB | **356 MB** | **9.7× less** |
+| first audio, from cold | 5.42 s | **0.94 s** | **5.8× faster** |
+| per sentence, once loaded | **40.1 ms** | 82.9 ms | GPU 2.7× faster |
+| accelerator | required | **none** | |
+
+Against the *same* Kokoro model on the *same* Arm CPU, it is **8.6× faster in
+7.5× less memory**.
+
+Two uses, one set of scripts: **serve an AI voice**, or **clone your own** —
+see [`4_voice_pipeline/`](4_voice_pipeline).
 
 ---
 
@@ -49,7 +51,7 @@ Three things, in this order. The first two need nothing installed.
 | | | time |
 |---|---|---|
 | **1** | ▶️ **[Watch the demo](https://youtu.be/Aw3xoq2rTG0)** — Apple M1 Max and DGX Spark side by side. Every word of the narration is spoken by the model itself, on an Arm CPU. | 3 min |
-| **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 37 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
+| **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 43 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
 | **3** | ⚡ `bash manage.sh install` — clean machine to a talking server. | 2 min |
 
 📐 **[ARCHITECTURE.html](ARCHITECTURE.html)** — the whole design in one picture.
@@ -142,10 +144,17 @@ asked for. For this user it is dead weight, not a feature being sacrificed.
 
 ---
 
-## The optimization
+## How it gets there
 
-Both targets are **asymmetric** Arm parts, and that asymmetry is the whole
-thing:
+Two things, and neither is a compression trick.
+
+**One voice instead of eleven.** Kokoro spends 27.94 M parameters on machinery
+whose only job is to condition on *which* voice you asked for. Trained from
+scratch on one voice, that capacity is not compressed — it is not there.
+326 MB becomes 68.5 MB.
+
+**An Arm-specific CPU path.** Both targets are **asymmetric** Arm parts, and
+that asymmetry is worth up to 2.2×:
 
 ```
 DGX Spark GB10   10x Cortex-X925 @ 3.90 GHz  +  10x Cortex-A725 @ 2.81 GHz
@@ -215,8 +224,14 @@ process. Raw output: [`3_evidence/benchmark_of_record_dgx_spark.json`](3_evidenc
 | Kokoro-82M — GPU | 0.01418 | 40.1 ms | 3464 MB | 326 MB |
 | Kokoro-82M — Arm CPU | 0.33447 | 947.5 ms | 2661 MB | 326 MB |
 
-**On the Arm CPU alone: 8.6× faster than the teacher, in 7.5× less memory,
-from a model 4.8× smaller.** That is the row both packages ship.
+**Read the first and last rows together.** Kokoro needs a GPU and 3.4 GB to
+reach 40 ms. VoiceYog needs a CPU core and 356 MB to reach 83 ms — twice the
+latency, **9.7× less memory, no accelerator at all**, and **5.8× faster to the
+first word** because there is no CUDA context to build and no 326 MB to push
+into VRAM.
+
+Against the same model on the same CPU it is **8.6× faster in 7.5× less
+memory**. That is the row both packages ship.
 
 **And the one that goes the wrong way: the cooperative path is 0.72×
 Kokoro-GPU — slower.** Running an entire model on CUDA beats splitting one
@@ -239,7 +254,7 @@ Every utterance uses both processors; neither can produce audio alone.
 python3 3_evidence/verify_claims.py
 ```
 
-No dependencies, no model, no network. It checks **all 37 figures** in this
+No dependencies, no model, no network. It checks **all 43 figures** in this
 README and `SUBMISSION.md` against the JSON the measurement scripts wrote, and
 exits non-zero if any disagree.
 
@@ -247,6 +262,7 @@ Then, on your own silicon:
 
 ```bash
 python3 2_arm_optimization/1_core_topology.py           # your cores, from the registers
+python3 2_arm_optimization/6_cold_start.py --help       # launch to first audio, cold
 B=1_packages/voiceyog-local-tts-kokoro-heart-new-*
 $B/.venv/bin/python3 2_arm_optimization/2_thread_sweep.py --json sweep.json
 ```
@@ -266,7 +282,7 @@ SUBMISSION.md        the full write-up (SUBMISSION.html renders identically)
 1_packages/          download.sh + SHA256SUMS   (the zips are release assets)
 2_arm_optimization/  the optimization, as four scripts you can run
 3_evidence/          every number, in the file that produced it
-4_voice_pipeline/    how a voice becomes an Arm-native model
+4_voice_pipeline/    build your own voice - 8 scripts, tested end to end
 ```
 
 The reusable part is `2_arm_optimization/`. `1_core_topology.py` answers "how

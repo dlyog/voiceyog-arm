@@ -1,9 +1,9 @@
 {
   "data": {
-    "csv_path": "1_SyntheticAudioDataset/output/metadata.csv",
-    "audio_dir": "1_SyntheticAudioDataset/output/wavs",
-    "phoneme_config": "models/tts_config.json",
-    "cache_dir": "2_TrainOnDGX/output/default/cache",
+    "csv_path": "output/kokoro/metadata.csv",
+    "audio_dir": "output/kokoro/wavs",
+    "phoneme_config": "tts_config.json",
+    "cache_dir": "runs/cache",
     "sample_rate": 24000,
     "filter_length": 1024,
     "hop_length": 256,
@@ -64,7 +64,7 @@
     "use_spectral_norm": false
   },
   "train": {
-    "output_dir": "2_TrainOnDGX/output",
+    "output_dir": "runs",
     "seed": 1234,
     "epochs": 2000,
     "batch_size": 32,
@@ -87,7 +87,7 @@
     "bf16": true,
     "log_every": 50,
     "save_every_epochs": 1,
-    "val_sentences": "3_ExportAndInferenceEngine/tts/eval_sentences.txt",
+    "val_sentences": "tts/eval_sentences.txt",
     "val_every_epochs": 10,
     "whisper_url": "http://127.0.0.1:8007/v1/audio/transcriptions",
     "keep_best_checkpoints": 10

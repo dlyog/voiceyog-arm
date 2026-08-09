@@ -41,6 +41,7 @@ FILES = {
     "int8_dgx": "int8_negative_result_dgx_spark.json",
     "int8_m1": "int8_negative_result_m1_max.json",
     "perfx": "arm_performix_profile_dgx_spark.json",
+    "cold": "cold_start_dgx_spark.json",
 }
 
 MODEL = "kokoro-heart-new v3"
@@ -209,6 +210,28 @@ def build_claims(d: dict) -> list[tuple]:
               next((i["percent"] for i in px["images"]
                     if i["image"] == "python"), 0.0), 0.2, 0.3,
               "perfx.images[python].percent"))
+
+    # --- memory against the deployment people are trying to escape ----------
+    C.append(("9.7x less memory than Kokoro needs on a GPU",
+              kok_gpu["peak_rss_mb"] / ours_cpu["peak_rss_mb"], 9.7, 0.05,
+              "kokoro_gpu.peak_rss_mb / ours_cpu.peak_rss_mb"))
+    C.append(("Kokoro on a GPU needs 3464 MB", kok_gpu["peak_rss_mb"], 3464.0, 1.0,
+              "bench.results.kokoro_gpu.peak_rss_mb"))
+
+    # --- cold start: the wait a person actually experiences -----------------
+    cs = d["cold"]
+    C.append(("cold start on the Arm CPU: 0.94 s to first audio",
+              cs["ours_arm_cpu"]["seconds_median"], 0.94, 0.15,
+              "cold.ours_arm_cpu.seconds_median"))
+    C.append(("cold start on the GPU: 5.42 s to first audio",
+              cs["kokoro_gpu"]["seconds_median"], 5.42, 0.5,
+              "cold.kokoro_gpu.seconds_median"))
+    C.append(("5.8x faster to first audio than the GPU, from cold",
+              cs["speedup_to_first_audio"], 5.8, 0.4,
+              "cold.speedup_to_first_audio"))
+    C.append(("and the GPU is 2.7x faster per sentence once loaded -- both stated",
+              ours_cpu["rtf_mean"] / kok_gpu["rtf_mean"], 2.7, 0.05,
+              "ours_cpu.rtf_mean / kokoro_gpu.rtf_mean"))
 
     return C
 

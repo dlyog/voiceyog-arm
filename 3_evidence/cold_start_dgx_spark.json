@@ -1,0 +1,25 @@
+{
+  "measured_at": "2026-08-09 23:04:08 UTC",
+  "machine": {
+    "machine": "aarch64",
+    "system": "Linux"
+  },
+  "what": "seconds from process launch to first audio sample, cold",
+  "runs_per_engine": 3,
+  "ours_arm_cpu": {
+    "ok": true,
+    "runs": 3,
+    "seconds_median": 0.935,
+    "seconds_min": 0.872,
+    "seconds_max": 0.981
+  },
+  "kokoro_gpu": {
+    "ok": true,
+    "runs": 3,
+    "seconds_median": 5.425,
+    "seconds_min": 5.332,
+    "seconds_max": 5.457
+  },
+  "speedup_to_first_audio": 5.8,
+  "note": "Steady-state per-sentence latency is the opposite: the GPU is ~2.7x faster once loaded. See benchmark_of_record_dgx_spark.json."
+}

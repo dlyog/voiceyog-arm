@@ -1,121 +1,169 @@
-# How a voice becomes an Arm-native model
+# Build your own voice
 
-This is the *why* behind the optimization, not part of it. The Arm work is in
-[`../2_arm_optimization/`](../2_arm_optimization); this directory exists so the
-premise — **one voice is all anyone needs** — is something you can inspect
-rather than take on faith.
+These are the scripts that made the model in this repository, and they are here
+so you can make a different one. Two things they are for:
+
+1. **An AI voice.** Pick any Kokoro voice, distil it into a 68.5 MB model that
+   runs on a CPU.
+2. **Your own voice.** Give a clone service one recording of yourself, and the
+   same pipeline produces *your* voice as a 68.5 MB model that runs on a CPU,
+   offline, for as long as you keep the file.
+
+Same scripts either way. Only step 5 changes.
 
 ```
-your voice  ──►  dataset  ──►  distilled VITS student  ──►  ONNX  ──►  Arm CPU
-  or a teacher    validate       train (GPU, hours)         export     no GPU
-     voice        FIRST                                                forever
+1_word_bank.py            ┐
+2_cmu_arctic_sentences.py ├─ 4_build_corpus.py  → the sentences to speak
+3_llm_sentences.py        ┘
+
+5_generate_dataset.py     → a teacher speaks them   (the only step that differs)
+6_validate_dataset.py     → check it BEFORE training
+7_train.py                → train the student on the GPU
+8_export_onnx.py          → 68.5 MB ONNX that runs on any Arm CPU
 ```
 
-The GPU builds the model **once**. After that the Arm CPU runs it, on hardware
-you own, with no network and no subscription.
+The GPU is used **once**, to build the model. After that it is never needed
+again.
 
 ---
 
-## What you can run here
+## The whole thing, run end to end
+
+Every command below was run on an NVIDIA DGX Spark GB10 before being written
+here, and the output is what it actually printed.
+
+### 1 · Build the prompt corpus
 
 ```bash
-python3 1_validate_dataset.py /path/to/your/dataset
+python3 4_build_corpus.py
+```
+```
+offline sources: 1194 sentences (62 word bank + 1132 CMU ARCTIC)
+corpus: 1194 sentences (0 duplicates dropped)
+words per sentence: min=1 max=13 avg=8.8
+written to output/corpus.jsonl
 ```
 
-Python 3 and the standard library. Nothing else.
+No network. The word bank covers what phoneme models get wrong — numbers,
+contractions, punctuation — and CMU ARCTIC supplies 1,132 phonetically
+balanced public-domain prompts.
 
-This is the piece worth taking. Training a bad dataset fails **slowly** and
-confusingly — often thousands of steps in, or worse, it trains happily on 40
-clips and produces noise. Every check in this script is one that has actually
-gone wrong on this project:
+### 2 · Have a teacher speak it
 
-- `metadata.csv` with the wrong delimiter
-- wav paths that include the folder prefix, so nothing resolves
-- a mix of sample rates
-- stereo files where mono is expected
-- clips long enough to teach the model to stop mid-phrase
+**An AI voice** — Kokoro-82M, in-process:
 
-Expected layout — the same one the released Hugging Face dataset uses:
-
-```
-<dir>/metadata.csv        <wav filename>|<transcript>, one per line
-<dir>/wavs/000001.wav     24 kHz mono 16-bit PCM
+```bash
+python3 5_generate_dataset.py --teacher kokoro --voice af_heart --hours 3.0
 ```
 
-Exit 0 if usable, 1 if not, and it says *which* check failed and *why* rather
-than dying with a traceback four hours into a run.
+**Your own voice** — a clone service, conditioned on one recording of you:
+
+```bash
+python3 5_generate_dataset.py --teacher clone --ref my-voice.wav \
+        --api http://127.0.0.1:8005 --hours 3.0
+```
+```
+teacher   clone via http://127.0.0.1:8005 from my-voice.wav
+corpus    1194 sentences
+2 clips · 0.00 h (2 new, 0 already there, 0 rejected)
+output/clone/metadata.csv
+```
+
+**Qwen3-TTS** is a free model that provides exactly this and is supported on
+DGX Spark. Install it and follow the [Qwen TTS guide on Hugging
+Face](https://huggingface.co/Qwen); this pipeline only needs a URL that accepts
+a reference wav and returns spoken text. Your recording is sent only to the URL
+you pass, which is expected to be a service you run.
+
+Each teacher writes to its own directory (`output/kokoro/`, `output/clone/`) so
+a quick `--limit 5` test can never overwrite a real dataset. Resumable: clips
+already on disk are skipped.
+
+### 3 · Validate before you train
+
+```bash
+python3 6_validate_dataset.py output/kokoro
+```
+```
+rows 4104 · wavs_on_disk 4104 · missing 0
+sample_rate 24000 · est_hours 3.057 · longest_sec 5.2
+OK — 4104 clips, ~3.057 h, 24000 Hz. Ready to train.
+```
+
+Worth the ten seconds. A bad dataset fails *slowly* — often thousands of steps
+in, or worse, it trains happily on 40 clips and produces noise. Every check
+here is one that has actually gone wrong: wrong delimiter, path prefixes in
+`metadata.csv`, mixed sample rates, stereo files, clips long enough to teach
+the model to stop mid-phrase.
+
+### 4 · Train
+
+```bash
+python3 7_train.py --config config.json
+```
+```
+dataset: 4104 clips
+128 batches/epoch at batch_size=32
+  generator             25.74 M
+    of which vocoder     3.76 M   (ResBlock1)
+  MPD                   46.75 M
+  MRD                    0.28 M
+  TOTAL trainable       72.77 M
+epoch 0 step 50  mel 65.8324  kl 12.8677  gen 3.5651  disc 5.2028  0.96 it/s
+[epoch 0] mel=54.1921 kl=6.3126 (125s)
+saved runs/checkpoints/epoch0000_step128_mel54.1921.pt
+```
+
+**This needs a GPU and it needs hours.** About 125 s per epoch on a GB10 with
+3 h of audio; a usable voice takes a few hundred epochs. It checkpoints every
+epoch and resumes with `--resume`, so it survives being interrupted.
+
+Trained **from scratch** — this is not a fine-tune of Kokoro. It is a smaller
+VITS/HiFi-GAN model learning from Kokoro's audio, which is why the result can
+be a tenth of the size rather than a compressed copy.
+
+### 5 · Export
+
+```bash
+python3 8_export_onnx.py --checkpoint runs/checkpoints/epoch0000_step128_mel54.1921.pt \
+                         --output-file my_voice.onnx
+```
+```
+checkpoint: epoch 0, step 128, train_mel 54.1921
+exported: my_voice.onnx  (68.5 MB)
+config:   my_voice.onnx.json
+smoke test: (1, 1, 27904) -> 1.16s of audio at 24000 Hz
+```
+
+That `.onnx` and its `.json` are what the packages in
+[`../1_packages/`](../1_packages) serve. Drop them into a bundle's `models/`
+directory and it will run your voice instead.
 
 ---
 
-## What is here to read, not to run
+## What you need
 
-`reference/` holds the actual source of the rest of the pipeline, so the
-process is auditable:
-
-| file | stage |
+| | |
 |---|---|
-| `4_build_corpus.py` | assemble the prompt text |
-| `5_generate_audio.py` | synthesize the corpus from a teacher voice |
-| `train.py` + `config.json` | the GPL-free VITS trainer |
-| `export_onnx.py` | checkpoint → the 68.5 MB ONNX graph that ships |
+| **GPU** | for step 4 only. A DGX Spark GB10 is what this was built and tested on. |
+| **espeak-ng** | phonemisation, at training and inference |
+| **PyTorch** | training and export |
+| `kokoro` | only for `--teacher kokoro` |
+| a clone service | only for `--teacher clone` — Qwen3-TTS on DGX Spark |
+| **Nothing** | for step 3. The validator is standard library only. |
 
-**These are deliberately not presented as something to execute.** Training
-needs a GPU, hours of compute, PyTorch and a teacher model. Someone who starts
-it expecting a two-minute demo and stalls has learned something misleading about
-this project, and there is no upside to set against that. The runnable,
-verifiable claims here are the thread sweep and the packages.
-
----
-
-## Provenance — the part that makes cloning defensible
-
-The obvious question about "clone any voice" is what stops misuse. The answer
-ships inside both packages, and it is not a promise:
-
-Every clip the server generates carries a **C2PA-shaped manifest** — a claim
-holding labelled assertions, signed with Ed25519:
-
-```
-c2pa.actions        created, softwareAgent,
-                    digitalSourceType = trainedAlgorithmicMedia
-c2pa.hash.data      sha256 of the wav, size, mime
-voiceyog.model      model id, version, sha256, sample rate
-voiceyog.runtime    package + runtime versions, providers, threads, platform
-voiceyog.request    request id, text sha256, duration, synth ms, RTF
-```
-
-The prompt text is **hashed, never stored** — provenance should establish what
-produced a clip without becoming a transcript log.
-
-Any recipient can verify it offline, with neither the model nor the private
-key:
-
-```bash
-.venv/bin/python3 examples/verify_output.py <outputs>/<request-id>
-```
-
-Tamper detection is tested, not asserted (`qa/check_package.py` in the bundle):
-flip one bit in the wav and `audio_matches` goes false; edit any assertion and
-`signature_valid` goes false; swap the public key while keeping the key id and
-it is rejected on both counts.
-
-**What it does and does not prove.** It proves a clip came from *this install*
-and has not been altered since. It does not attest to a person or an
-organisation — the key is generated locally. Binding output to an identity
-needs a certificate chain and a key in a keychain or HSM; that upgrade path is
-documented in the bundle's `ARCHITECTURE.md`.
+The `tts/` directory beside these scripts is the model code the trainer needs,
+vendored so the pipeline is self-contained.
 
 ---
 
-## Honest provenance of this model
+## Two honest notes
 
-- **kokoro-heart-new v3** was distilled from
-  [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) (Apache-2.0) using
-  its `af_heart` voice as the teacher. Kokoro is therefore a hard quality
-  ceiling by construction.
-- An earlier model in this project, `tarun_voice`, was trained from **a real
-  person's recorded voice** and is the proof that the cloning path works
-  end to end. It was produced by the **previous** version of this pipeline, not
-  the one described here.
-- Clone your own voice, or one you have the right to use. The teacher here is
-  Apache-2.0 licensed, which is why this model can be distributed at all.
+**Kokoro is a ceiling, not a floor.** A student trained on a teacher's audio
+cannot exceed the teacher. What it can do is be 4.8× smaller and run without a
+GPU, which is the trade this whole project is about.
+
+**Clone your own voice, or one you have the right to use.** The provenance
+signing built into every package exists for exactly this reason: each clip
+carries a signed record naming the model that made it, verifiable offline by
+anyone who receives it.

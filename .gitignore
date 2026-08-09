@@ -225,3 +225,9 @@ __marimo__/
 1_packages/*.zip.part
 1_packages/voiceyog-local-tts-*/
 .voiceyog-arm-state
+
+# Pipeline working directories: corpora, generated audio, checkpoints.
+4_voice_pipeline/output/
+4_voice_pipeline/runs/
+4_voice_pipeline/*.onnx
+4_voice_pipeline/*.onnx.json
