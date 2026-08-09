@@ -10,7 +10,21 @@ less memory** on the same Arm CPU.
 
 **No GPU. No CUDA. No PyTorch at inference. No network.**
 
-📐 **[ARCHITECTURE.html](ARCHITECTURE.html)** — the whole thing in one picture.
+---
+
+## Start here
+
+Three things, in this order. The first two need nothing installed.
+
+| | | time |
+|---|---|---|
+| **1** | ▶️ **[Watch the demo](demo/voiceyog-arm-demo.mp4)** — Apple M1 Max and DGX Spark side by side. Every word of the narration is spoken by the model itself, on an Arm CPU. | 3 min |
+| **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 33 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
+| **3** | ⚡ `bash manage.sh install` — clean machine to a talking server. | 2 min |
+
+📐 **[ARCHITECTURE.html](ARCHITECTURE.html)** — the whole design in one picture.
+📄 **[SUBMISSION.md](SUBMISSION.md)** — the full write-up, with the reasoning
+behind every number.
 
 ---
 
@@ -190,11 +204,14 @@ It will contradict us if we are wrong.
 
 ```
 manage.sh            install | start | stop | status | log | demo | uninstall
-1_packages/          download.sh + SHA256SUMS   (zips are release assets)
-2_arm_optimization/  the optimization, as scripts you can run
+ARCHITECTURE.html    the design in one picture
+SUBMISSION.md        the full write-up (SUBMISSION.html renders identically)
+
+demo/                the 3-minute video + its transcript
+1_packages/          download.sh + SHA256SUMS   (the zips are release assets)
+2_arm_optimization/  the optimization, as four scripts you can run
 3_evidence/          every number, in the file that produced it
 4_voice_pipeline/    how a voice becomes an Arm-native model
-SUBMISSION.md        the full narrative (SUBMISSION.html renders identically)
 ```
 
 The reusable part is `2_arm_optimization/`. `1_core_topology.py` answers "how
@@ -272,7 +289,53 @@ is why the Python bindings that *would* link it are deliberately not used.
 
 ---
 
+## How to cite
+
+If the thread-tuning utility, the model, or the measurements here are useful in
+your work, please cite the repository:
+
+```bibtex
+@software{chawdhury2026voiceyogarm,
+  author       = {Chawdhury, Tarun Kumar},
+  title        = {VoiceYog on Arm: Single-Voice TTS Distillation and
+                  Topology-Derived Thread Tuning for Asymmetric Arm CPUs},
+  year         = {2026},
+  url          = {https://github.com/dlyog/voiceyog-arm},
+  organization = {DLYog Lab Research Services LLC},
+  license      = {Apache-2.0}
+}
+```
+
+Plain text:
+
+> Tarun Kumar Chawdhury. *VoiceYog on Arm: Single-Voice TTS Distillation and
+> Topology-Derived Thread Tuning for Asymmetric Arm CPUs.* DLYog Lab Research
+> Services LLC, 2026. https://github.com/dlyog/voiceyog-arm
+
+**Please cite Kokoro-82M as well.** It is the teacher this model was distilled
+from and the baseline every measurement here is taken against — none of these
+numbers mean anything without it:
+
+```bibtex
+@misc{kokoro82m,
+  title        = {Kokoro-82M},
+  howpublished = {\url{https://huggingface.co/hexgrad/Kokoro-82M}},
+  note         = {Apache-2.0}
+}
+```
+
+And the architectures the student is built from —
+[VITS](https://github.com/jaywalnut310/vits) (Kim et al., 2021) and
+[HiFi-GAN](https://github.com/jik876/hifi-gan) (Kong et al., 2020).
+
+---
+
 ## Licence
 
 Copyright © 2026 Tarun Kumar Chawdhury, DLYog Lab Research Services LLC.
 Apache License 2.0 — see [`LICENSE`](LICENSE).
+
+The model weights are published separately at
+[huggingface.co/dlyog/af_heart_arm_tts](https://huggingface.co/dlyog/af_heart_arm_tts).
+The packages in the release bundle their weights directly, so nothing here
+depends on that repository being reachable.
