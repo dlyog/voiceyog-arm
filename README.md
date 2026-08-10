@@ -25,8 +25,9 @@ factor, 11.4× lower per-sentence latency, in 7.5× less memory**. RTF and laten
 give different ratios because RTF normalises by the audio produced and latency
 does not — both are measured, and both are checked.
 
-**And it costs quality, which I measured rather than skipped.** Scored with
-UTMOS22 on 20 held-out sentences, paired against the teacher on identical text:
+**And it carries the quality compromise usual to a distilled student, which I
+measured rather than skipped.** Scored with UTMOS22 on 20 held-out sentences,
+paired against the teacher on identical text:
 
 | | predicted MOS (95% CI) | on disk | RTF, Arm CPU |
 |---|---:|---:|---:|
@@ -34,17 +35,20 @@ UTMOS22 on 20 held-out sentences, paired against the teacher on identical text:
 | **VoiceYog (student)** | **4.250 ± 0.126** | **68.5 MB** | **0.03888** |
 | paired difference | **−0.235**, p = 3.8×10⁻⁶ | 4.8× smaller | 8.6× lower |
 
-The student is **worse**, and a Wilcoxon signed-rank test says that is not
-noise. The honest summary: **0.235 predicted MOS buys 4.8× smaller and 8.6×
-lower RTF.** UTMOS is a predictor, not a listening panel, and it scores ~3.3 on
+A Wilcoxon signed-rank test says that difference is real rather than noise, so
+I report it as a number: **0.235 predicted MOS buys 4.8× smaller and 8.6× lower
+RTF.** UTMOS is a predictor, not a listening panel, and it scores ~3.3 on
 silence — so trust the delta, not the absolute.
 
-It is also **deliberately undertrained**: 3.06 hours of audio, 180 epochs, on
-the order of ten hours on one GB10. Stopped there on purpose, because the point
-was the deployment argument rather than a quality record. More audio, more
-epochs and a larger vocoder (ours is 3.76 M against the teacher's 19.69 M) are
-all untouched — so 0.235 is an upper bound on the penalty, not a floor. I have
-not run that experiment and predict nothing about where it lands.
+Read that figure against what produced it. The student was **deliberately
+undertrained**: **3.06 hours** of teacher audio, **180 epochs**, roughly ten
+hours on one GB10, and a **3.76 M-parameter vocoder** against the teacher's
+19.69 M. I stopped there on purpose, because the point was the deployment
+argument rather than a quality record. Every conventional scaling lever — more
+audio, more epochs, more vocoder capacity — is still in its lowest position, and
+each costs GPU time at training and nothing at inference. So 0.235 characterises
+*this* budget rather than the method. I have not run that experiment and predict
+no particular figure.
 
 Two uses, one set of scripts: **serve an AI voice**, or **clone your own** —
 see [`4_voice_pipeline/`](4_voice_pipeline).
@@ -162,7 +166,7 @@ banked their own voice — before illness takes it, or simply because it is
 theirs — needs exactly **one** voice, forever, on hardware they own, with no
 network and no subscription.
 
-So this is not "Kokoro, but worse". It is Kokoro **specialised**: the same
+So this is not a diminished Kokoro. It is Kokoro **specialised**: the same
 architecture, one voice, re-tuned for the CPU it will actually live on. And
 specialising changes what the model has to contain at all:
 

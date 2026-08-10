@@ -248,8 +248,8 @@ def build_claims(d: dict) -> list[tuple]:
               "ours_cpu.latency_ms_mean / kokoro_gpu.latency_ms_mean"))
 
     # --- predicted speech quality ------------------------------------------
-    # The student is WORSE than its teacher and these claims assert exactly
-    # that. A checker that only guards flattering numbers is decoration.
+    # These claims assert the quality compromise, not just the wins. A checker
+    # that only guards flattering numbers is decoration.
     mos = d["mos"]
     C.append(("UTMOS: teacher scores 4.49",
               mos["teacher"]["utmos_mean"], 4.485, 0.01,
@@ -257,7 +257,7 @@ def build_claims(d: dict) -> list[tuple]:
     C.append(("UTMOS: student scores 4.25",
               mos["student"]["utmos_mean"], 4.250, 0.01,
               "mos.student.utmos_mean"))
-    C.append(("UTMOS: the student is 0.235 BELOW its teacher -- stated plainly",
+    C.append(("UTMOS: the student trails its teacher by 0.235 -- stated plainly",
               mos["paired_delta_student_minus_teacher"]["mean"], -0.235, 0.01,
               "mos.paired_delta_student_minus_teacher.mean"))
     C.append(("that gap is statistically significant, not noise (p < 0.001)",
