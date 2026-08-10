@@ -44,9 +44,12 @@ Measured on the DGX Spark GB10 with an idle GPU, using 20 held-out sentences and
 
 The comparison I care about most is **VoiceYog CPU versus Kokoro CPU on the same Arm system**:
 
-- **8.6x faster**
+- **8.6x lower real-time factor** (RTF 0.03888 vs 0.33447)
+- **11.4x lower per-sentence latency** (82.9 ms vs 947.5 ms)
 - **7.5x less runtime memory**
 - **4.8x smaller model on disk**
+
+RTF and latency give different ratios because RTF normalises by the audio produced and latency does not. Both are measured; I quote RTF when one number is needed because it is the conservative one.
 
 A GPU is still faster once Kokoro is fully loaded. I am not trying to hide that. The point is that this workload no longer *needs* a GPU.
 
@@ -98,15 +101,16 @@ export runs on the CPU, which is the whole point of the project.
 
 Against the same Kokoro model on the same DGX Spark Arm CPU:
 
-- **8.6x faster** and **7.5x less memory**
+- **8.6x lower RTF**, **11.4x lower per-sentence latency**, and **7.5x less memory**
 - 68.5 MB on disk instead of 326 MB
 
 And against Kokoro running on the GB10 GPU:
 
 - **9.7x less memory** while running, 356 MB against 3464 MB
 - **5.8x faster to the first word** from a cold start, 0.94 s against 5.42 s
-- but the GPU is still **2.7x faster per sentence** once it is loaded, and I
-  would rather say so than have somebody find it
+- but once loaded Kokoro on the GPU still has **2.74x lower RTF**, equivalently
+  about **2.07x lower per-sentence latency**, and I would rather say so than have
+  somebody find it
 
 ---
 
@@ -307,7 +311,7 @@ That felt wasteful for my use case. Most of the time I need one language and one
 
 So I built VoiceYog: a smaller, single-voice TTS model and an Arm-aware inference runtime around it.
 
-On the same DGX Spark Arm CPU, VoiceYog is **8.6x faster than Kokoro CPU inference while using 7.5x less memory**. The model is 68.5 MB on disk and uses about 356 MB while running. Inference needs no GPU, no cloud API, and no internet connection.
+On the same DGX Spark Arm CPU, VoiceYog attains **8.6x lower RTF than Kokoro CPU inference while using 7.5x less memory**. The model is 68.5 MB on disk and uses about 356 MB while running. Inference needs no GPU, no cloud API, and no internet connection.
 
 The DGX Spark was my main development box. I generated the training data there, trained the student model on its GB10 Blackwell GPU, built the inference path there, and used it for the benchmark, profiling, and thread-tuning work.
 
