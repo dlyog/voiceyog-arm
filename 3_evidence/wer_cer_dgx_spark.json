@@ -1,0 +1,211 @@
+{
+  "what": "ASR intelligibility of the shipped model: synthesize held-out text, transcribe it back, score the transcript",
+  "asr": {
+    "engine": "openai-whisper",
+    "model": "small.en",
+    "language": "en",
+    "temperature": 0.0
+  },
+  "normalizer": "NFKD, strip accents, lowercase, keep [a-z0-9'] and spaces, collapse whitespace",
+  "wer_definition": "total word edits / total reference words (corpus WER, not the mean of per-sentence rates)",
+  "model": {
+    "path": "/home/dlyog/.voiceyog/models/kokoro-heart-new/v3/kokoro-heart-new.onnx",
+    "bytes": 71844142,
+    "sample_rate": 24000
+  },
+  "text": {
+    "n_sentences": 20,
+    "held_out": true,
+    "source": "4_voice_pipeline/tts/eval_sentences.txt"
+  },
+  "wer": 0.018633540372670808,
+  "cer": 0.024531024531024532,
+  "exact_transcripts": 19,
+  "n": 20,
+  "per_sentence": [
+    {
+      "reference": "The weather changed suddenly this afternoon.",
+      "heard_as": "The weather changed suddenly this afternoon.",
+      "word_errors": 0,
+      "ref_words": 6,
+      "char_errors": 0,
+      "ref_chars": 38,
+      "wer": 0.0
+    },
+    {
+      "reference": "Could you please pass me that book?",
+      "heard_as": "Could you please pass me that book?",
+      "word_errors": 0,
+      "ref_words": 7,
+      "char_errors": 0,
+      "ref_chars": 28,
+      "wer": 0.0
+    },
+    {
+      "reference": "Wow, I did not expect to see you here!",
+      "heard_as": "Wow I did not expect to see you here.",
+      "word_errors": 0,
+      "ref_words": 9,
+      "char_errors": 0,
+      "ref_chars": 28,
+      "wer": 0.0
+    },
+    {
+      "reference": "Our meeting has been moved to three o'clock.",
+      "heard_as": "Our meeting has been moved to three o'clock.",
+      "word_errors": 0,
+      "ref_words": 8,
+      "char_errors": 0,
+      "ref_chars": 36,
+      "wer": 0.0
+    },
+    {
+      "reference": "She walked quietly across the empty room.",
+      "heard_as": "She walked quietly across the empty room.",
+      "word_errors": 0,
+      "ref_words": 7,
+      "char_errors": 0,
+      "ref_chars": 34,
+      "wer": 0.0
+    },
+    {
+      "reference": "How many people are coming to dinner tonight?",
+      "heard_as": "How many people are coming to dinner tonight?",
+      "word_errors": 0,
+      "ref_words": 8,
+      "char_errors": 0,
+      "ref_chars": 37,
+      "wer": 0.0
+    },
+    {
+      "reference": "The bridge was built over a hundred years ago.",
+      "heard_as": "The bridge was built over a hundred years ago.",
+      "word_errors": 0,
+      "ref_words": 9,
+      "char_errors": 0,
+      "ref_chars": 37,
+      "wer": 0.0
+    },
+    {
+      "reference": "I really appreciate everything you have done.",
+      "heard_as": "I really appreciate everything you have done.",
+      "word_errors": 0,
+      "ref_words": 7,
+      "char_errors": 0,
+      "ref_chars": 38,
+      "wer": 0.0
+    },
+    {
+      "reference": "Turn left at the second traffic light.",
+      "heard_as": "Turn left at the second traffic light.",
+      "word_errors": 0,
+      "ref_words": 7,
+      "char_errors": 0,
+      "ref_chars": 31,
+      "wer": 0.0
+    },
+    {
+      "reference": "This recipe calls for two cups of sugar.",
+      "heard_as": "This recipe calls for two cups of sugar.",
+      "word_errors": 0,
+      "ref_words": 8,
+      "char_errors": 0,
+      "ref_chars": 32,
+      "wer": 0.0
+    },
+    {
+      "reference": "Are you sure that's the right address?",
+      "heard_as": "Are you sure that's the right address?",
+      "word_errors": 0,
+      "ref_words": 7,
+      "char_errors": 0,
+      "ref_chars": 31,
+      "wer": 0.0
+    },
+    {
+      "reference": "The engine made a strange noise before it stopped.",
+      "heard_as": "The engine made a strange noise before it stopped.",
+      "word_errors": 0,
+      "ref_words": 9,
+      "char_errors": 0,
+      "ref_chars": 41,
+      "wer": 0.0
+    },
+    {
+      "reference": "He finished the marathon in just under four hours.",
+      "heard_as": "He finished the marathon in just under four hours.",
+      "word_errors": 0,
+      "ref_words": 9,
+      "char_errors": 0,
+      "ref_chars": 41,
+      "wer": 0.0
+    },
+    {
+      "reference": "Please remember to lock the door on your way out.",
+      "heard_as": "Please remember to lock the door on your way out.",
+      "word_errors": 0,
+      "ref_words": 10,
+      "char_errors": 0,
+      "ref_chars": 39,
+      "wer": 0.0
+    },
+    {
+      "reference": "What a beautiful sunset over the mountains.",
+      "heard_as": "What a beautiful sunset over the mountains.",
+      "word_errors": 0,
+      "ref_words": 7,
+      "char_errors": 0,
+      "ref_chars": 36,
+      "wer": 0.0
+    },
+    {
+      "reference": "The report is due by the end of next week.",
+      "heard_as": "The report is due by the end of next week.",
+      "word_errors": 0,
+      "ref_words": 10,
+      "char_errors": 0,
+      "ref_chars": 32,
+      "wer": 0.0
+    },
+    {
+      "reference": "I can't believe how fast the year went by.",
+      "heard_as": "I can't believe how fast the year went by.",
+      "word_errors": 0,
+      "ref_words": 9,
+      "char_errors": 0,
+      "ref_chars": 33,
+      "wer": 0.0
+    },
+    {
+      "reference": "Set the oven to three hundred fifty degrees.",
+      "heard_as": "Set the oven to 350 degrees.",
+      "word_errors": 3,
+      "ref_words": 8,
+      "char_errors": 17,
+      "ref_chars": 36,
+      "wer": 0.375
+    },
+    {
+      "reference": "They rebuilt the old library after the fire.",
+      "heard_as": "They rebuilt the old library after the fire.",
+      "word_errors": 0,
+      "ref_words": 8,
+      "char_errors": 0,
+      "ref_chars": 36,
+      "wer": 0.0
+    },
+    {
+      "reference": "Can you hear me clearly on this call?",
+      "heard_as": "Can you hear me clearly on this call?",
+      "word_errors": 0,
+      "ref_words": 8,
+      "char_errors": 0,
+      "ref_chars": 29,
+      "wer": 0.0
+    }
+  ],
+  "platform": {
+    "machine": "aarch64",
+    "system": "Linux"
+  }
+}

@@ -211,3 +211,17 @@ the time to scipy's OpenBLAS, which would have contradicted everything above.
 It had profiled a different workload. The run recorded here samples the shipped
 v3 model through the same CPU engine the packages use, and its run id is in the
 JSON so it can be re-exported and checked.
+
+## Speech quality
+
+Two scripts, both writing evidence that `3_evidence/verify_claims.py` checks.
+
+| script | what it measures | reproduce |
+|---|---|---|
+| `8_wer_cer.py` | ASR intelligibility — WER 0.0186, CER 0.0245, 19/20 exact | `python3 8_wer_cer.py` — builds its own venv, installs Whisper, needs nothing else |
+| `7_predicted_mos.py` | UTMOS22 predicted MOS, student vs teacher, paired | needs Kokoro installed for the teacher side, and the training metadata to prove the text was held out |
+
+`8_wer_cer.py` is the one to run first: it is self-contained and touches no
+environment you already have. Corpus WER is total word edits over total
+reference words, and the normalizer is written into the evidence file, because
+neither number means anything without knowing which convention produced it.

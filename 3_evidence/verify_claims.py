@@ -43,6 +43,7 @@ FILES = {
     "perfx": "arm_performix_profile_dgx_spark.json",
     "cold": "cold_start_dgx_spark.json",
     "mos": "mos_eval_dgx_spark.json",
+    "wer": "wer_cer_dgx_spark.json",
 }
 
 MODEL = "kokoro-heart-new v3"
@@ -268,6 +269,19 @@ def build_claims(d: dict) -> list[tuple]:
               "mos.text.overlap_with_training_text"))
     C.append(("MOS was scored on 20 sentences",
               mos["text"]["n_sentences"], 20, 0, "mos.text.n_sentences"))
+
+    # --- intelligibility ----------------------------------------------------
+    # Reproducible by anyone: 2_arm_optimization/8_wer_cer.py builds its own
+    # venv, installs Whisper, synthesizes the held-out text and scores it.
+    w = d["wer"]
+    C.append(("ASR intelligibility: WER 0.0186 on held-out text",
+              w["wer"], 0.0186, 0.0005, "wer.wer"))
+    C.append(("ASR intelligibility: CER 0.0245",
+              w["cer"], 0.0245, 0.0005, "wer.cer"))
+    C.append(("19 of 20 sentences transcribe back exactly",
+              w["exact_transcripts"], 19, 0, "wer.exact_transcripts"))
+    C.append(("intelligibility was scored on the same 20 held-out sentences",
+              w["text"]["n_sentences"], 20, 0, "wer.text.n_sentences"))
 
     return C
 

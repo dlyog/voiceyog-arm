@@ -19,6 +19,7 @@ times and we report the spread across runs as well as across sentences.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 import wave
@@ -26,12 +27,42 @@ from pathlib import Path
 
 import numpy as np
 
-ARMTTS = Path("/home/dlyog/armtts")
-ENGINE_DIR = ARMTTS / "3_ExportAndInferenceEngine"
-SENTENCES = ENGINE_DIR / "tts" / "eval_sentences.txt"
-TRAIN_META = ARMTTS / "1_SyntheticAudioDataset" / "metadata.csv"
-STUDENT_ONNX = Path("/home/dlyog/.voiceyog/models/kokoro-heart-new/v3/kokoro-heart-new.onnx")
-OUT_DIR = Path("/tmp/mos_eval")
+# Paths resolve against this checkout, with environment overrides, so nothing is
+# pinned to the machine this was first run on.
+HERE = Path(__file__).resolve().parent
+REPO = HERE.parent
+PIPELINE = REPO / "4_voice_pipeline"
+EVIDENCE = REPO / "3_evidence"
+
+ENGINE_DIR = Path(os.environ.get("VOICEYOG_ENGINE", PIPELINE))
+SENTENCES = Path(os.environ.get("VOICEYOG_SENTENCES", PIPELINE / "tts" / "eval_sentences.txt"))
+# The held-out check needs the training metadata, which is NOT in this repository
+# -- it is an artifact of your own training run. Point at it, or the script says
+# so and stops rather than quietly scoring on text the model may have seen.
+TRAIN_META = Path(os.environ.get("VOICEYOG_TRAIN_META",
+                                 Path.home() / ".voiceyog" / "datasets" / "metadata.csv"))
+OUT_DIR = Path(os.environ.get("VOICEYOG_MOS_WORKDIR", HERE / "mos_audio"))
+
+
+def _find_student() -> Path:
+    if os.environ.get("VOICEYOG_MODEL"):
+        return Path(os.environ["VOICEYOG_MODEL"])
+    best = None
+    for root in (Path.home() / ".voiceyog" / "models", REPO / "models"):
+        if not root.is_dir():
+            continue
+        for c in root.rglob("*.onnx"):
+            if "encoder_prefix" in c.name:
+                continue
+            if best is None or c.stat().st_mtime > best.stat().st_mtime:
+                best = c
+    if best is None:
+        sys.exit("  fail  no installed model found. Run: bash manage.sh install\n"
+                 "        or set VOICEYOG_MODEL=/path/to/model.onnx")
+    return best
+
+
+STUDENT_ONNX = _find_student()
 REPEATS = 3
 TEACHER_VOICE = "af_heart"
 

@@ -40,14 +40,22 @@ I report it as a number: **0.235 predicted MOS buys 4.8× smaller and 8.6× lowe
 RTF.** UTMOS is a predictor, not a listening panel, and it scores ~3.3 on
 silence — so trust the delta, not the absolute.
 
-Predicted MOS is about naturalness, not about whether the words survive.
-Scoring intelligibility on the same checkpoint gives **WER 0.0347** and
-**CER 0.0316**, with 8 of 10 sentences transcribed exactly — so the compromise
-is one of polish rather than content: the words arrive intact, and what the
-smaller model gives up is in the delivery. *Those two figures came from a
-separate internal harness rather than from this repository, so unlike every
-other number here they are not re-runnable from what is published and are not
-part of the checked set — treat them as author-reported.*
+Predicted MOS is about naturalness, not about whether the words survive, so
+intelligibility is measured separately — **WER 0.0186**, **CER 0.0245**, with
+**19 of 20** sentences transcribed back exactly. The compromise is therefore one
+of polish rather than content: the words arrive intact, and what the smaller
+model gives up is in the delivery.
+
+**Re-run that yourself in one command** (see [Reproduce the quality numbers](#reproduce-the-quality-numbers)):
+
+```bash
+python3 2_arm_optimization/8_wer_cer.py
+```
+
+The one imperfect transcript is not a synthesis failure: the reference says
+"three hundred fifty" and Whisper wrote "350". I report 0.0186 as measured
+rather than teaching the normalizer to expand numerals after seeing which
+sentence failed.
 
 Read that figure against what produced it. The student was **deliberately
 undertrained**: **3.06 hours** of teacher audio, **180 epochs**, roughly ten
@@ -93,9 +101,11 @@ Three things, in this order. The first two need nothing installed.
 | | | time |
 |---|---|---|
 | **1** | ▶️ **[Watch the demo](https://www.youtube.com/watch?v=L4THa8PWQi4)** — Apple M1 Max and DGX Spark side by side, with both voices made by this project. | 4 min |
-| **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 51 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
+| **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 55 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
 | **3** | ⚡ `bash manage.sh install` — clean machine to a talking server. | 2 min |
 
+🔬 **[Reproduce the quality numbers](#reproduce-the-quality-numbers)** — one
+command on a DGX Spark, no setup.
 📐 **[ARCHITECTURE.html](ARCHITECTURE.html)** — the whole design in one picture.
 📄 **[SUBMISSION.md](SUBMISSION.md)** — the full write-up, with the reasoning
 behind every number.
@@ -202,6 +212,72 @@ out. Every box is a script in this repository.
 **The GPU appears once, in `7_train.py`.** Everything after the export runs on
 the CPU — which is the whole point. Full walkthrough with the output each step
 actually printed: [`4_voice_pipeline/`](4_voice_pipeline).
+
+---
+
+## Reproduce the quality numbers
+
+Every speed figure in this README is already checked by
+`3_evidence/verify_claims.py`. The two quality figures are re-runnable from
+scratch, and this is how.
+
+**On a DGX Spark, after `bash manage.sh install`:**
+
+```bash
+python3 2_arm_optimization/8_wer_cer.py
+```
+
+That is the whole command. On first run it builds a private virtualenv beside
+the script, installs Whisper into it, and re-executes itself there — your system
+Python and the serving environment are untouched. Then it synthesizes the 20
+held-out sentences with the model you just installed, transcribes them back, and
+writes `3_evidence/wer_cer_dgx_spark.json`.
+
+Expected output:
+
+```
+  model      ~/.voiceyog/models/kokoro-heart-new/v3/kokoro-heart-new.onnx
+  sentences  20 held-out
+  whisper    small.en
+
+  WER 0.0186   CER 0.0245   exact 19/20
+```
+
+Then re-run the checker and watch the intelligibility claims verify against the
+file you just produced:
+
+```bash
+python3 3_evidence/verify_claims.py | grep -i intelligibility
+```
+
+| flag | why |
+|---|---|
+| `--whisper base.en` | faster ASR — but it **changes the number**, see below |
+| `--model <path.onnx>` | score a different checkpoint |
+| `--no-bootstrap` | use the current interpreter, skip the venv |
+
+**WER is a property of the pair, not of the model alone.** The same audio scored
+with `base.en` instead of `small.en` gives WER 0.0435 and 16/20 exact — the ASR
+got weaker, the speech did not change. That is why the evidence file records
+which ASR produced the number, and why the checked claim is pinned to the
+default `small.en`. Compare across engines only if you re-score both sides.
+
+**What the script does and does not do.** It scores the *shipped* model against
+text it was never trained on, listed in
+[`4_voice_pipeline/tts/eval_sentences.txt`](4_voice_pipeline/tts/eval_sentences.txt).
+Corpus WER is total word edits over total reference words — not the mean of
+per-sentence rates, which would let a three-word sentence outweigh a twenty-word
+one. The text normalizer is printed into the evidence file, because a WER is
+meaningless unless you know which normalizer produced it: lowercase, strip
+accents, drop punctuation apart from apostrophes, collapse whitespace. It does
+**not** expand numerals, which is why the one imperfect sentence scores as three
+substitutions when Whisper writes "350" for "three hundred fifty".
+
+The predicted-MOS figures come from
+[`2_arm_optimization/7_predicted_mos.py`](2_arm_optimization/7_predicted_mos.py),
+which scores both engines with UTMOS22 and writes
+`3_evidence/mos_eval_dgx_spark.json`. It needs Kokoro installed to generate the
+teacher side, so it is the heavier of the two to reproduce.
 
 ---
 

@@ -231,3 +231,6 @@ __marimo__/
 4_voice_pipeline/runs/
 4_voice_pipeline/*.onnx
 4_voice_pipeline/*.onnx.json
+2_arm_optimization/.venv-wer/
+2_arm_optimization/wer_audio/
+2_arm_optimization/mos_audio/
