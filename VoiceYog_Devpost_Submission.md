@@ -325,4 +325,4 @@ I have also published a paper that takes the idea further, as **DTVS — Distrib
 
 The paper is careful about what it does not show. My student drops multi-voice conditioning *and* uses a smaller architecture, so the size and speed gains cannot be credited to specialization alone; it names the ablation that would settle it rather than claiming a result it has not run. It also reports no speech-quality evaluation, and says so.
 
-**Paper:** [Distribution-Time Voice Specialization: Only One Voice Is Needed at a Time in On-Device Text-to-Speech](https://www.dlyog.com/papers/VoiceYogMixtureOfVoice) · [PDF](https://www.dlyog.com/papers/VoiceYogMixtureOfVoice.pdf)
+**Paper:** [Distribution-Time Voice Specialization: Only One Voice Is Needed at a Time in On-Device Text-to-Speech](https://www.dlyog.com/papers/DistributionTimeVoiceSpecialization) · [PDF](https://www.dlyog.com/papers/DistributionTimeVoiceSpecialization.pdf)
