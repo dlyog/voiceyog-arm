@@ -82,8 +82,8 @@ class TextAudioDataset(torch.utils.data.Dataset):
         # leaves metadata.csv byte-identical and its mtime untouched, so a
         # csv-only key would serve the previous voice's cached tensors and
         # train on it silently. That is the original bug wearing a new hat, and
-        # Dataset Studio makes it routine: preview a voice, dislike it, pick
-        # another candidate, regenerate into the same folder.
+        # any iterative workflow makes it routine: preview a voice, dislike it,
+        # pick another candidate, regenerate into the same folder.
         #
         # Count, total bytes and newest mtime over the wavs -- one directory
         # scan, no file reads. It cannot detect a same-size same-mtime edit,

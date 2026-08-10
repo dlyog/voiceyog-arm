@@ -40,6 +40,15 @@ I report it as a number: **0.235 predicted MOS buys 4.8× smaller and 8.6× lowe
 RTF.** UTMOS is a predictor, not a listening panel, and it scores ~3.3 on
 silence — so trust the delta, not the absolute.
 
+Predicted MOS is about naturalness, not about whether the words survive.
+Scoring intelligibility on the same checkpoint gives **WER 0.0347** and
+**CER 0.0316**, with 8 of 10 sentences transcribed exactly — so the compromise
+is one of polish rather than content: the words arrive intact, and what the
+smaller model gives up is in the delivery. *Those two figures came from a
+separate internal harness rather than from this repository, so unlike every
+other number here they are not re-runnable from what is published and are not
+part of the checked set — treat them as author-reported.*
+
 Read that figure against what produced it. The student was **deliberately
 undertrained**: **3.06 hours** of teacher audio, **180 epochs**, roughly ten
 hours on one GB10, and a **3.76 M-parameter vocoder** against the teacher's
