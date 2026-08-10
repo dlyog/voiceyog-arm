@@ -63,6 +63,10 @@ Three things, in this order. The first two need nothing installed.
 📐 **[ARCHITECTURE.html](ARCHITECTURE.html)** — the whole design in one picture.
 📄 **[SUBMISSION.md](SUBMISSION.md)** — the full write-up, with the reasoning
 behind every number.
+📝 **[Mixture of Voice](https://www.dlyog.com/papers/VoiceYogMixtureOfVoice)**
+([PDF](https://www.dlyog.com/papers/VoiceYogMixtureOfVoice.pdf)) — the preprint
+that generalises this result: choose the voice at distribution time, not inside
+the network, and one N-voice model becomes N single-voice specialists.
 
 ---
 

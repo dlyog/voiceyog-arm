@@ -1,5 +1,3 @@
-# VoiceYog: Arm-Optimized TTS
-
 ## Inspiration
 
 The original motivation was personal voice ownership.
@@ -231,7 +229,7 @@ The same repository can install on DGX Spark or Apple Silicon and choose a hardw
 
 The core-topology utility is also reusable beyond TTS. The same idea applies to other ONNX workloads running on asymmetric Arm CPUs.
 
-I am also happy that the demo is produced with the project's own models. Most of the narration uses my voice cloned locally with Qwen3-TTS on the DGX Spark, and the small VoiceYog model speaks for itself during the inference scenes.
+I am also happy that the demo is produced with the project's own models. During Demo  VoiceYog model speaks for itself during the inference scenes.
 
 And finally, I am proud that the failed experiments are still visible. The INT8 result failed. The cooperative CPU-to-GPU path did not beat pure Kokoro GPU inference. Those results helped narrow the project toward the part that actually worked well: **small, local Arm CPU inference**.
 
@@ -311,9 +309,6 @@ So I built VoiceYog: a smaller, single-voice TTS model and an Arm-aware inferenc
 
 On the same DGX Spark Arm CPU, VoiceYog is **8.6x faster than Kokoro CPU inference while using 7.5x less memory**. The model is 68.5 MB on disk and uses about 356 MB while running. Inference needs no GPU, no cloud API, and no internet connection.
 
-**Demo:** https://www.youtube.com/watch?v=L4THa8PWQi4  
-**Repository:** https://github.com/dlyog/voiceyog-arm
-
 The DGX Spark was my main development box. I generated the training data there, trained the student model on its GB10 Blackwell GPU, built the inference path there, and used it for the benchmark, profiling, and thread-tuning work.
 
 From the same project I prepared inference packages for two Arm targets: **DGX Spark and Apple Silicon**.
@@ -321,3 +316,7 @@ From the same project I prepared inference packages for two Arm targets: **DGX S
 That split became the main idea behind the project:
 
 **Use the GPU for the expensive work you do once. Run the voice on the Arm CPU for the work you do again and again.**
+
+I have also published a paper that takes the idea further, as **MoV — Mixture of Voice**. The argument is that a multi-voice model makes every device carry the ability to be *any* voice so that it can be *one*, and that the voice should therefore be chosen at distribution time rather than inside the network at inference time: one N-voice model becomes N single-voice specialists, each independently deployable. It is the deployment-time counterpart of Mixture-of-Experts, except the router is the user's own choice, it sits outside the model, and nothing has to be learned. The paper also explains why one distilled voice is enough to test that: the cost a device pays is the cost of one specialist, and that number does not depend on how many voices the catalogue holds. The single-voice result in this project is the measurement behind it.
+
+**Paper:** [Mixture of Voice: Only One Voice Is Needed at a Time in On-Device Text-to-Speech](https://www.dlyog.com/papers/VoiceYogMixtureOfVoice) · [PDF](https://www.dlyog.com/papers/VoiceYogMixtureOfVoice.pdf)
