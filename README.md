@@ -69,10 +69,6 @@ behind every number.
 ([PDF](https://www.dlyog.com/papers/DistributionTimeVoiceSpecialization.pdf)) — the preprint
 that generalises this result: choose the voice at distribution time, not inside
 the network, and one N-voice deployment becomes N single-voice specialists.
-*Earlier drafts referred to this concept as Mixture of Voice (MoV); it was
-renamed because that term is already used in TTS literature for an unrelated
-inference-time mechanism, and because "mixture of" implies the runtime routing
-this work removes. The old `/papers/VoiceYogMixtureOfVoice` URL redirects here.*
 
 ---
 
