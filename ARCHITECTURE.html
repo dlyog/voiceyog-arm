@@ -14,20 +14,20 @@
   .wrap{display:flex;height:666px}
 
   /* ---- left: the problem ---- */
-  .left{width:640px;padding:52px 40px 46px 56px;border-right:1px solid #e6e1d8;
+  .left{width:660px;padding:40px 36px 36px 52px;border-right:1px solid #e6e1d8;
         display:flex;flex-direction:column}
   .brand{font-size:30px;font-weight:700;letter-spacing:-.02em;margin:0 0 4px}
   .brand em{font-style:normal;color:#a2531d}
-  .tag{font-size:14.5px;color:#5f5c50;margin:0 0 26px}
+  .tag{font-size:14px;color:#5f5c50;margin:0 0 20px}
   .eyebrow{font:600 11px/1 "SF Mono",Menlo,monospace;letter-spacing:.16em;
            text-transform:uppercase;color:#a2531d;margin:0 0 14px}
-  .p{font-size:19px;line-height:1.45;margin:0 0 14px;letter-spacing:-.01em}
+  .p{font-size:18px;line-height:1.42;margin:0 0 12px;letter-spacing:-.01em}
   .p b{font-weight:650}
   .small{font-size:14.5px;color:#5f5c50;line-height:1.5;margin:0}
   .rule{height:1px;background:#e6e1d8;margin:22px 0}
 
-  .teach{margin-top:auto;border-top:1px solid #e6e1d8;padding-top:20px}
-  .kok{font-size:21px;margin:0 0 8px;letter-spacing:-.01em}
+  .teach{margin-top:auto;border-top:1px solid #e6e1d8;padding-top:16px}
+  .kok{font-size:19px;margin:0 0 6px;letter-spacing:-.01em}
   .kok b{font-weight:700}
   .kok span{font:11px/1 "SF Mono",Menlo,monospace;color:#8a8578;
             border:1px solid #ded7cb;border-radius:999px;padding:4px 9px;
@@ -35,8 +35,8 @@
   .nums{display:flex;gap:34px;margin-top:0}
   .n .k{font:600 10.5px/1 "SF Mono",Menlo,monospace;letter-spacing:.12em;
         text-transform:uppercase;color:#8a8578}
-  .n .v{font-size:27px;font-weight:700;letter-spacing:-.02em;margin-top:7px}
-  .n .v s{text-decoration:none;color:#b9b3a6;font-weight:500;font-size:19px}
+  .n .v{font-size:23px;font-weight:700;letter-spacing:-.02em;margin-top:7px}
+  .n .v s{text-decoration:none;color:#b9b3a6;font-weight:500;font-size:16px}
 
   /* ---- right: the pipeline ---- */
   .right{flex:1;padding:44px 56px 40px 48px;display:flex;flex-direction:column}
@@ -92,14 +92,13 @@
 
     <div class="r2">
       <p class="eyebrow">The problem</p>
-      <p class="p">Every text-to-speech model ships <b>a dozen voices you will
-      never use</b>.</p>
+      <p class="p">Kokoro is the gold standard for small TTS. It also wants
+      <b>a GPU and 3.4&nbsp;GB</b> — and ships a dozen voices you will never
+      use.</p>
       <p class="p">If you have banked your own voice — before illness takes it,
       or simply because it is yours — you need <b>exactly one</b>. Forever. On
       hardware you own, offline.</p>
-      <div class="rule"></div>
-      <p class="small">So the multi-voice machinery is not capability being
-      sacrificed. For this user it was never capability at all.</p>
+
     </div>
 
     <div class="teach r5">
@@ -110,10 +109,14 @@
       re-tuned for Arm CPUs, so it runs faster in less memory on hardware
       people already own.</p>
       <div class="nums">
+        <div class="n"><div class="k">memory to run</div>
+          <div class="v"><s>3464 MB on a GPU</s> &nbsp;356 MB</div></div>
+      </div>
+      <div class="nums" style="margin-top:10px">
         <div class="n"><div class="k">model</div>
           <div class="v"><s>326 MB</s> &nbsp;68.5 MB</div></div>
-        <div class="n"><div class="k">vocoder</div>
-          <div class="v"><s>19.69 M</s> &nbsp;3.76 M</div></div>
+        <div class="n"><div class="k">first word, cold</div>
+          <div class="v"><s>5.4 s</s> &nbsp;0.9 s</div></div>
       </div>
     </div>
   </div>
