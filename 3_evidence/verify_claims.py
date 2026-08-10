@@ -116,9 +116,16 @@ def build_claims(d: dict) -> list[tuple]:
               82.89, 0.05, "bench.results.ours_cpu.latency_ms_mean"))
     C.append(("Arm CPU only: 356 MB peak RSS", ours_cpu["peak_rss_mb"], 356.0, 1.0,
               "bench.results.ours_cpu.peak_rss_mb"))
-    C.append(("8.6x faster than the teacher on the same Arm CPU",
+    # Two ratios, named by their metric. RTF normalises by audio produced and
+    # latency does not, so the same pair of engines gives 8.6x and 11.4x. Quoting
+    # one number as "faster" without saying which metric it is invites exactly the
+    # arithmetic complaint a reader would otherwise raise against the table.
+    C.append(("8.6x lower RTF than the teacher on the same Arm CPU",
               kok_cpu["rtf_mean"] / ours_cpu["rtf_mean"], 8.6, 0.05,
               "kokoro_cpu.rtf_mean / ours_cpu.rtf_mean"))
+    C.append(("11.4x lower mean sentence latency than the teacher, same Arm CPU",
+              kok_cpu["latency_ms_mean"] / ours_cpu["latency_ms_mean"], 11.43, 0.05,
+              "kokoro_cpu.latency_ms_mean / ours_cpu.latency_ms_mean"))
     C.append(("7.5x less memory than the teacher on the same Arm CPU",
               kok_cpu["peak_rss_mb"] / ours_cpu["peak_rss_mb"], 7.5, 0.05,
               "kokoro_cpu.peak_rss_mb / ours_cpu.peak_rss_mb"))
@@ -229,9 +236,15 @@ def build_claims(d: dict) -> list[tuple]:
     C.append(("5.8x faster to first audio than the GPU, from cold",
               cs["speedup_to_first_audio"], 5.8, 0.4,
               "cold.speedup_to_first_audio"))
-    C.append(("and the GPU is 2.7x faster per sentence once loaded -- both stated",
-              ours_cpu["rtf_mean"] / kok_gpu["rtf_mean"], 2.7, 0.05,
+    # The GPU wins once loaded, and it wins by different amounts depending on the
+    # metric. Stating it as "2.7x faster per sentence" conflated the RTF ratio with
+    # a latency ratio it does not equal; both are asserted separately now.
+    C.append(("Kokoro GPU: 2.74x lower RTF than VoiceYog on the Arm CPU",
+              ours_cpu["rtf_mean"] / kok_gpu["rtf_mean"], 2.74, 0.05,
               "ours_cpu.rtf_mean / kokoro_gpu.rtf_mean"))
+    C.append(("Kokoro GPU: 2.07x lower mean sentence latency -- both stated",
+              ours_cpu["latency_ms_mean"] / kok_gpu["latency_ms_mean"], 2.07, 0.02,
+              "ours_cpu.latency_ms_mean / kokoro_gpu.latency_ms_mean"))
 
     return C
 

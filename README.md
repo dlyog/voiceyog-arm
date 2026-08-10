@@ -17,11 +17,13 @@ voice, one language, **68.5 MB** — and built an Arm-specific CPU path for it.
 | model on disk | 326 MB | **68.5 MB** | **4.8× smaller** |
 | memory while running | 3464 MB | **356 MB** | **9.7× less** |
 | first audio, from cold | 5.42 s | **0.94 s** | **5.8× faster** |
-| per sentence, once loaded | **40.1 ms** | 82.9 ms | GPU 2.7× faster |
+| per sentence, once loaded | **40.1 ms** | 82.9 ms | GPU 2.07× lower latency |
 | accelerator | required | **none** | |
 
-Against the *same* Kokoro model on the *same* Arm CPU, it is **8.6× faster in
-7.5× less memory**.
+Against the *same* Kokoro model on the *same* Arm CPU: **8.6× lower real-time
+factor, 11.4× lower per-sentence latency, in 7.5× less memory**. RTF and latency
+give different ratios because RTF normalises by the audio produced and latency
+does not — both are measured, and both are checked.
 
 Two uses, one set of scripts: **serve an AI voice**, or **clone your own** —
 see [`4_voice_pipeline/`](4_voice_pipeline).
@@ -57,16 +59,19 @@ Three things, in this order. The first two need nothing installed.
 | | | time |
 |---|---|---|
 | **1** | ▶️ **[Watch the demo](https://www.youtube.com/watch?v=L4THa8PWQi4)** — Apple M1 Max and DGX Spark side by side, with both voices made by this project. | 4 min |
-| **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 43 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
+| **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 45 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
 | **3** | ⚡ `bash manage.sh install` — clean machine to a talking server. | 2 min |
 
 📐 **[ARCHITECTURE.html](ARCHITECTURE.html)** — the whole design in one picture.
 📄 **[SUBMISSION.md](SUBMISSION.md)** — the full write-up, with the reasoning
 behind every number.
-📝 **[Mixture of Voice](https://www.dlyog.com/papers/VoiceYogMixtureOfVoice)**
+📝 **[Distribution-Time Voice Specialization](https://www.dlyog.com/papers/VoiceYogMixtureOfVoice)**
 ([PDF](https://www.dlyog.com/papers/VoiceYogMixtureOfVoice.pdf)) — the preprint
 that generalises this result: choose the voice at distribution time, not inside
-the network, and one N-voice model becomes N single-voice specialists.
+the network, and one N-voice deployment becomes N single-voice specialists.
+*Earlier drafts referred to this concept as Mixture of Voice (MoV); it was
+renamed because that term is already used in TTS literature for an unrelated
+inference-time mechanism. The URL is unchanged.*
 
 ---
 
@@ -122,8 +127,10 @@ cd voiceyog-local-tts-kokoro-heart-new-*
 bash install.sh && bash start.sh
 ```
 
-`espeak-ng` is the phonemizer. It runs as a **separate process**, never linked,
-which is what keeps its GPL terms out of the shipped runtime.
+`espeak-ng` is the phonemizer. It is invoked as a **separate executable** and its
+code is never linked into the VoiceYog runtime. eSpeak NG is GPL-3.0-or-later;
+that sentence describes the engineering arrangement only and is not a statement
+about licensing consequences.
 
 </details>
 
@@ -348,7 +355,7 @@ Reproduce it: `2_arm_optimization/3_int8_negative_result.py`.
   largest remaining win. Designed, not built, not claimed.
 - **KleidiAI is absent from the runtime I pin, and present in a newer one.**
   The packages ship onnxruntime 1.20.1, which contains **0** KleidiAI symbols
-  on either target. onnxruntime 1.28.0 on the same DGX Spark contains **11**
+  on either target. A 1.28.0 prerelease build (commit `45de2a8b06`) on the same DGX Spark contains **11**
   `kai_run_matmul_*` symbols. Arm's optimized matmul kernels would accelerate
   exactly the CPU prefix that is now the bottleneck, so upgrading the pinned
   runtime is a concrete measurable next step rather than a wish — I have not

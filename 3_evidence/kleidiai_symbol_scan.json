@@ -1,8 +1,11 @@
 {
   "measured_at": "2026-08-09 UTC",
+  "build_metadata_confirmed_at": "2026-08-10 UTC",
+  "what": "Whether Arm KleidiAI micro-kernels are present in the ONNX Runtime binaries involved, established by symbol scan rather than by release notes.",
   "method": "strings <onnxruntime_pybind11_state*.so> | grep -c ; strings catches statically linked symbols that nm -D on the dynamic table misses",
   "shipped_runtime": {
-    "version": "1.20.1",
+    "reported_version": "1.20.1",
+    "release_channel": "stable",
     "note": "pinned in the packages, both targets",
     "apple_silicon": {
       "kai_run_matmul": 0,
@@ -14,10 +17,18 @@
     }
   },
   "newer_runtime_not_shipped": {
-    "version": "1.28.0",
+    "reported_version": "1.28.0",
+    "git_commit_id": "45de2a8b06",
+    "build_type": "Release",
+    "wheel_tag": "cp312-cp312-manylinux_2_28_aarch64",
+    "installer": "pip",
+    "release_channel": "prerelease",
+    "release_channel_note": "Not present in the stable PyPI release history for onnxruntime at the time of measurement, so this build is identified by commit id rather than by version string alone. https://pypi.org/project/onnxruntime/#history",
+    "observed_in": "/home/dlyog/voiceyog/.venv/lib/python3.12/site-packages/onnxruntime",
     "host": "DGX Spark GB10, aarch64",
     "kai_run_matmul": 11,
     "kleidi": 13
   },
-  "conclusion": "KleidiAI is absent from the runtime this submission ships and present in 1.28.0 on the same hardware. Upgrading the pin is a measurable next step; no speedup is claimed because none was measured."
+  "conclusion": "KleidiAI is absent from the runtime this submission ships and present in the 1.28.0 prerelease build (commit 45de2a8b06) on the same hardware. Upgrading the pin is a measurable next step; no speedup is claimed because none was measured.",
+  "why_this_detail": "A bare '1.28.0' reads as a nonexistent stable release and invites the reader to assume the number was invented. Recording the commit id, wheel tag and release channel makes the scan reproducible against the exact binary that was measured."
 }

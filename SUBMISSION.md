@@ -296,7 +296,7 @@ asymmetric Arm part, and the honest answer is always read off `MIDR_EL1` and
   largest remaining win. Designed, not built, not claimed.
 - **KleidiAI is absent from the runtime I pin, and present in a newer one.**
   The packages ship onnxruntime 1.20.1, which contains **0** KleidiAI symbols
-  on either target. onnxruntime 1.28.0 on the same DGX Spark contains **11**
+  on either target. A 1.28.0 prerelease build (commit `45de2a8b06`) on the same DGX Spark contains **11**
   `kai_run_matmul_*` symbols. Arm's optimized matmul kernels would accelerate
   exactly the CPU prefix that is now the bottleneck, so upgrading the pinned
   runtime is a concrete measurable next step rather than a wish — I have not
