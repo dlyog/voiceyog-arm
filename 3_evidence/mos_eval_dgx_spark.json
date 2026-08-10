@@ -1,0 +1,140 @@
+{
+  "what": "UTMOS22 predicted MOS, distilled student vs its teacher, paired on identical held-out text",
+  "predictor": {
+    "name": "UTMOS22 (utmos22_strong)",
+    "source": "torch.hub tarepan/SpeechMOS:v1.2.0",
+    "caveat": "Neural predictor, not a human listening test. Scores ~3.3 on silence, so absolute values are weak evidence; the paired delta is the quantity of interest."
+  },
+  "text": {
+    "n_sentences": 20,
+    "held_out": true,
+    "overlap_with_training_text": 0,
+    "training_texts_checked": 4104
+  },
+  "student": {
+    "model": "/home/dlyog/.voiceyog/models/kokoro-heart-new/v3/kokoro-heart-new.onnx",
+    "bytes": 71844142,
+    "repeats": 3,
+    "note": "synthesis is stochastic (noise_w > 0); per-sentence scores averaged over repeats",
+    "utmos_mean": 4.250148141384125,
+    "utmos_ci95_halfwidth": 0.1260632671423172,
+    "per_run_means": [
+      4.250148141384125,
+      4.250148141384125,
+      4.250148141384125
+    ]
+  },
+  "teacher": {
+    "model": "Kokoro-82M",
+    "voice": "af_heart",
+    "utmos_mean": 4.485155725479126,
+    "utmos_ci95_halfwidth": 0.01682901215053022
+  },
+  "paired_delta_student_minus_teacher": {
+    "mean": -0.23500758409500122,
+    "wilcoxon_W": 1.0,
+    "wilcoxon_p": 3.814697265625e-06
+  },
+  "per_sentence": [
+    {
+      "text": "The weather changed suddenly this afternoon.",
+      "teacher": 4.503913879394531,
+      "student": 4.448658466339111
+    },
+    {
+      "text": "Could you please pass me that book?",
+      "teacher": 4.471109390258789,
+      "student": 4.436975479125977
+    },
+    {
+      "text": "Wow, I did not expect to see you here!",
+      "teacher": 4.480312824249268,
+      "student": 3.8054380416870117
+    },
+    {
+      "text": "Our meeting has been moved to three o'clock.",
+      "teacher": 4.542654514312744,
+      "student": 4.433036804199219
+    },
+    {
+      "text": "She walked quietly across the empty room.",
+      "teacher": 4.508062362670898,
+      "student": 4.3969221115112305
+    },
+    {
+      "text": "How many people are coming to dinner tonight?",
+      "teacher": 4.513894557952881,
+      "student": 3.8797738552093506
+    },
+    {
+      "text": "The bridge was built over a hundred years ago.",
+      "teacher": 4.491161346435547,
+      "student": 4.418177604675293
+    },
+    {
+      "text": "I really appreciate everything you have done.",
+      "teacher": 4.5058794021606445,
+      "student": 3.943817615509033
+    },
+    {
+      "text": "Turn left at the second traffic light.",
+      "teacher": 4.506725788116455,
+      "student": 4.405518531799316
+    },
+    {
+      "text": "This recipe calls for two cups of sugar.",
+      "teacher": 4.509607791900635,
+      "student": 4.051392555236816
+    },
+    {
+      "text": "Are you sure that's the right address?",
+      "teacher": 4.464071750640869,
+      "student": 4.312431335449219
+    },
+    {
+      "text": "The engine made a strange noise before it stopped.",
+      "teacher": 4.476925849914551,
+      "student": 4.446695327758789
+    },
+    {
+      "text": "He finished the marathon in just under four hours.",
+      "teacher": 4.478955268859863,
+      "student": 4.408486366271973
+    },
+    {
+      "text": "Please remember to lock the door on your way out.",
+      "teacher": 4.504179000854492,
+      "student": 4.3754425048828125
+    },
+    {
+      "text": "What a beautiful sunset over the mountains.",
+      "teacher": 4.4634222984313965,
+      "student": 4.001541614532471
+    },
+    {
+      "text": "The report is due by the end of next week.",
+      "teacher": 4.5192694664001465,
+      "student": 4.451778888702393
+    },
+    {
+      "text": "I can't believe how fast the year went by.",
+      "teacher": 4.430800437927246,
+      "student": 4.458096981048584
+    },
+    {
+      "text": "Set the oven to three hundred fifty degrees.",
+      "teacher": 4.495338439941406,
+      "student": 4.412145614624023
+    },
+    {
+      "text": "They rebuilt the old library after the fire.",
+      "teacher": 4.377835273742676,
+      "student": 4.347545623779297
+    },
+    {
+      "text": "Can you hear me clearly on this call?",
+      "teacher": 4.4589948654174805,
+      "student": 3.569087505340576
+    }
+  ]
+}

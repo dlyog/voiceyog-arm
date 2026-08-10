@@ -42,6 +42,7 @@ FILES = {
     "int8_m1": "int8_negative_result_m1_max.json",
     "perfx": "arm_performix_profile_dgx_spark.json",
     "cold": "cold_start_dgx_spark.json",
+    "mos": "mos_eval_dgx_spark.json",
 }
 
 MODEL = "kokoro-heart-new v3"
@@ -245,6 +246,28 @@ def build_claims(d: dict) -> list[tuple]:
     C.append(("Kokoro GPU: 2.07x lower mean sentence latency -- both stated",
               ours_cpu["latency_ms_mean"] / kok_gpu["latency_ms_mean"], 2.07, 0.02,
               "ours_cpu.latency_ms_mean / kokoro_gpu.latency_ms_mean"))
+
+    # --- predicted speech quality ------------------------------------------
+    # The student is WORSE than its teacher and these claims assert exactly
+    # that. A checker that only guards flattering numbers is decoration.
+    mos = d["mos"]
+    C.append(("UTMOS: teacher scores 4.49",
+              mos["teacher"]["utmos_mean"], 4.485, 0.01,
+              "mos.teacher.utmos_mean"))
+    C.append(("UTMOS: student scores 4.25",
+              mos["student"]["utmos_mean"], 4.250, 0.01,
+              "mos.student.utmos_mean"))
+    C.append(("UTMOS: the student is 0.235 BELOW its teacher -- stated plainly",
+              mos["paired_delta_student_minus_teacher"]["mean"], -0.235, 0.01,
+              "mos.paired_delta_student_minus_teacher.mean"))
+    C.append(("that gap is statistically significant, not noise (p < 0.001)",
+              1.0 if mos["paired_delta_student_minus_teacher"]["wilcoxon_p"] < 0.001 else 0.0,
+              1.0, 0.0, "mos.paired_delta.wilcoxon_p < 0.001"))
+    C.append(("MOS text was held out: zero overlap with the training set",
+              mos["text"]["overlap_with_training_text"], 0, 0,
+              "mos.text.overlap_with_training_text"))
+    C.append(("MOS was scored on 20 sentences",
+              mos["text"]["n_sentences"], 20, 0, "mos.text.n_sentences"))
 
     return C
 

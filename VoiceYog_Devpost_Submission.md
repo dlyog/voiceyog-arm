@@ -53,6 +53,22 @@ RTF and latency give different ratios because RTF normalises by the audio produc
 
 A GPU is still faster once Kokoro is fully loaded. I am not trying to hide that. The point is that this workload no longer *needs* a GPU.
 
+### What it costs in quality
+
+Speed and size are only half a result, so I measured the other half. Both engines spoke the same 20 held-out sentences — checked disjoint from all 4,104 training texts — scored with UTMOS22, the VoiceMOS Challenge predictor:
+
+| Engine | Predicted MOS (95% CI) | On disk | RTF |
+|---|---:|---:|---:|
+| Kokoro-82M (teacher) | 4.485 ± 0.017 | 326 MB | 0.33447 |
+| **VoiceYog (student)** | **4.250 ± 0.126** | **68.5 MB** | **0.03888** |
+| paired difference | **−0.235**, p = 3.8×10⁻⁶ | 4.8× smaller | 8.6× lower |
+
+My model is **worse**, and a Wilcoxon signed-rank test says that gap is real rather than sampling noise. I would rather write that down than claim "comparable quality". The trade is: **0.235 predicted MOS buys 4.8× smaller and 8.6× lower RTF.**
+
+Worth knowing how little was spent getting there. It was trained on 3.06 hours of audio for 180 epochs, roughly ten hours on one GB10 — and I stopped it there deliberately, because the point of the project was the deployment argument, not a quality record. More audio, more epochs and a bigger vocoder (mine is 3.76 M parameters against the teacher's 19.69 M) are all still on the table, so that 0.235 is an upper bound on the penalty rather than a floor. I have not run that experiment, so I am not predicting where it would land.
+
+Two honest caveats. UTMOS is an automatic predictor, not a human listening panel — it scores about 3.3 on pure silence, so the absolute number flatters and only the delta is trustworthy. And my family and I have listened to plenty of it and find it perfectly good for narration, tutorials or a personal voice — but that is an impression from an unblinded group of four, not a study, and it should count for nothing. A real evaluation would need Whisper WER, speaker similarity, and 20–50 independent listeners. That is future work.
+
 Cold start also changes the experience. Kokoro GPU took 5.42 seconds from process start to first audio in my test, while VoiceYog CPU took 0.94 seconds.
 
 ### Private voice deployment

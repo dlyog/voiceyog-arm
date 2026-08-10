@@ -25,6 +25,27 @@ factor, 11.4× lower per-sentence latency, in 7.5× less memory**. RTF and laten
 give different ratios because RTF normalises by the audio produced and latency
 does not — both are measured, and both are checked.
 
+**And it costs quality, which I measured rather than skipped.** Scored with
+UTMOS22 on 20 held-out sentences, paired against the teacher on identical text:
+
+| | predicted MOS (95% CI) | on disk | RTF, Arm CPU |
+|---|---:|---:|---:|
+| Kokoro-82M (teacher) | 4.485 ± 0.017 | 326 MB | 0.33447 |
+| **VoiceYog (student)** | **4.250 ± 0.126** | **68.5 MB** | **0.03888** |
+| paired difference | **−0.235**, p = 3.8×10⁻⁶ | 4.8× smaller | 8.6× lower |
+
+The student is **worse**, and a Wilcoxon signed-rank test says that is not
+noise. The honest summary: **0.235 predicted MOS buys 4.8× smaller and 8.6×
+lower RTF.** UTMOS is a predictor, not a listening panel, and it scores ~3.3 on
+silence — so trust the delta, not the absolute.
+
+It is also **deliberately undertrained**: 3.06 hours of audio, 180 epochs, on
+the order of ten hours on one GB10. Stopped there on purpose, because the point
+was the deployment argument rather than a quality record. More audio, more
+epochs and a larger vocoder (ours is 3.76 M against the teacher's 19.69 M) are
+all untouched — so 0.235 is an upper bound on the penalty, not a floor. I have
+not run that experiment and predict nothing about where it lands.
+
 Two uses, one set of scripts: **serve an AI voice**, or **clone your own** —
 see [`4_voice_pipeline/`](4_voice_pipeline).
 
@@ -59,7 +80,7 @@ Three things, in this order. The first two need nothing installed.
 | | | time |
 |---|---|---|
 | **1** | ▶️ **[Watch the demo](https://www.youtube.com/watch?v=L4THa8PWQi4)** — Apple M1 Max and DGX Spark side by side, with both voices made by this project. | 4 min |
-| **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 45 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
+| **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 51 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
 | **3** | ⚡ `bash manage.sh install` — clean machine to a talking server. | 2 min |
 
 📐 **[ARCHITECTURE.html](ARCHITECTURE.html)** — the whole design in one picture.
