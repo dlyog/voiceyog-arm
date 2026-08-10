@@ -69,9 +69,17 @@ For me, that privacy story is just as important as the speed.
 
 ### Provenance
 
-Every generated clip also carries a signed provenance record containing information such as the model, checksum, runtime, and platform.
+Every generated clip also carries a signed provenance record containing information such as the model, checksum, runtime, and platform. It is verifiable offline, and tamper-evident: change one bit of the audio and the check fails.
 
 The goal is simple: generated voice should be fast and private, but it should also be traceable.
+
+There is an angle here I did not expect when I started. Regulation is moving toward persistent provenance for AI-generated audio — California's AI Transparency Act (SB 942), as amended by AB 853, becomes operative on August 2, 2026 for covered providers. Existing provenance can usually say *that* audio was generated and by which system, but not *which voice*, because in a shared multi-voice model the voice is a runtime argument rather than a property of the artifact.
+
+Single-voice specialization changes that for free: one voice is one model file, so the checksum already in the record identifies the voice, because there is exactly one voice that file can produce.
+
+I want to be careful about how far that goes. The record is **detached, not embedded** — it is not a watermark, it can be stripped by whoever redistributes the audio, and it does **not** let anyone identify a voice just by listening. It does not satisfy a latent-disclosure requirement, and VoiceYog is nowhere near the one-million-user threshold that makes a provider "covered", so I am claiming no compliance of any kind. What I am saying is narrower: this deployment shape is a natural place to attach identity, and pairing it with an acoustic watermark is the obvious next step. That part is future work.
+
+*This is research work and may contain inaccuracies. Nothing here is legal advice.*
 
 ---
 

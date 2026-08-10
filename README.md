@@ -171,6 +171,36 @@ actually printed: [`4_voice_pipeline/`](4_voice_pipeline).
 
 ---
 
+## Provenance, and deployment identity
+
+Every clip carries a signed record naming the model, its checksum, the runtime
+and the platform. It verifies offline — the recipient needs neither the model
+nor the private key — and it is tamper-evident: flip one bit of the audio and
+the check fails.
+
+Regulation is moving toward persistent provenance for AI-generated audio;
+California's AI Transparency Act ([SB 942](https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202320240SB942)),
+as amended by [AB 853](https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260AB853),
+becomes operative on 2 August 2026 for covered providers. Provenance today
+usually establishes *that* audio was generated and by which system, but not
+*which voice* — in a shared multi-voice model the voice is a runtime argument,
+not a property of the artifact. Specialising to one voice changes that at no
+extra cost: one voice is one file, so the checksum already in the record
+identifies the voice, because there is exactly one voice that file can produce.
+
+**What this is not.** The record is detached, not embedded. It is not a
+watermark, it can be stripped by anyone redistributing the audio, and it does
+not let a listener identify a voice by hearing it. It does not satisfy a
+latent-disclosure requirement, and this project is far below the
+one-million-user threshold that defines a covered provider — so no compliance
+of any kind is claimed. Pairing this with an acoustic watermark is the obvious
+next step and is not built. See §9.1 of the
+[preprint](https://www.dlyog.com/papers/DistributionTimeVoiceSpecialization).
+
+*Research work; may contain inaccuracies. Not legal advice.*
+
+---
+
 ## How it gets there
 
 Two things, and neither is a compression trick.
@@ -436,6 +466,11 @@ And the architectures the student is built from —
 
 Copyright © 2026 Tarun Kumar Chawdhury, DLYog Lab Research Services LLC.
 Apache License 2.0 — see [`LICENSE`](LICENSE).
+
+**Disclaimer.** This is research work. It may contain inaccuracies, the
+measurements describe the two machines they were taken on, and any discussion
+of regulation is engineering motivation rather than a compliance assessment —
+nothing here is legal advice.
 
 The model weights are published separately at
 [huggingface.co/dlyog/af_heart_arm_tts](https://huggingface.co/dlyog/af_heart_arm_tts).
