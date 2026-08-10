@@ -81,22 +81,7 @@ voice that runs on an Arm CPU comes out at the bottom. Every box is a script in
 this repository, and every one of them was run on the DGX Spark before it was
 written about here.
 
-```mermaid
-flowchart TD
-    S["Sample audio<br/>one recording of the voice you want"]
-    C["4_build_corpus.py<br/>1,194 sentences for the teacher to speak"]
-    G["5_generate_dataset.py<br/>a teacher speaks the corpus in that voice"]
-    V["6_validate_dataset.py<br/>4,104 clips · 24 kHz · 3.06 h"]
-    T["7_train.py<br/>VITS + HiFi-GAN student, on the GB10 GPU"]
-    E["8_export_onnx.py<br/>68.5 MB Arm ONNX graph"]
-    O["2_arm_optimization/1_core_topology.py<br/>read the Arm cores, pick the thread count"]
-    I["manage.sh install<br/>inference server: DGX Spark or Apple Silicon"]
-    R["CPU-only inference<br/>82.9 ms per sentence in 356 MB"]
-
-    S --> G
-    C --> G
-    G --> V --> T --> E --> O --> I --> R
-```
+![VoiceYog architecture: sample audio and a built corpus feed 5_generate_dataset.py, then 6_validate_dataset.py, 7_train.py on the GB10 GPU, 8_export_onnx.py, 1_core_topology.py, manage.sh install, and finally CPU-only inference at 82.9 ms per sentence in 356 MB](https://raw.githubusercontent.com/dlyog/voiceyog-arm/main/.github/architecture.png)
 
 | Step | Script | What comes out |
 |---|---|---|
