@@ -2,9 +2,9 @@
 
 **Tarun Kumar Chawdhury** · DLYog Lab Research Services LLC · Apache 2.0
 
-**[Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)** is the gold standard
-for small text-to-speech. It is also 326 MB, and to run fast it wants a GPU and
-**3.4 GB of memory**.
+**[Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)** is one of the best
+lightweight text-to-speech models you can get, but on an Arm CPU it takes about
+a second to generate a sentence, which is why it is usually run on a GPU.
 
 Most people only ever use one voice. So on an NVIDIA DGX Spark, using its GPU
 and distillation from Kokoro, I trained a new model **from scratch** — one
@@ -30,18 +30,23 @@ see [`4_voice_pipeline/`](4_voice_pipeline).
 
 ## Demo
 
-[![Watch the demo — Apple M1 Max and DGX Spark side by side](.github/demo-thumbnail.png)](https://youtu.be/Aw3xoq2rTG0)
+[![Watch the demo — Apple M1 Max and DGX Spark side by side](.github/demo-thumbnail.png)](https://www.youtube.com/watch?v=L4THa8PWQi4)
 
-**▶ [youtu.be/Aw3xoq2rTG0](https://youtu.be/Aw3xoq2rTG0)** — 3 minutes. Apple M1
-Max on the left, NVIDIA DGX Spark GB10 on the right, running the same repository
-and the same commands.
+**▶ [youtube.com/watch?v=L4THa8PWQi4](https://www.youtube.com/watch?v=L4THa8PWQi4)** — 4 minutes.
+Apple M1 Max on the left, NVIDIA DGX Spark GB10 on the right, running the same
+repository and the same commands.
 
 Watch the SERVER panel in both: same model, same version, same 68.5 MB — and the
 Mac loads **8 threads** while the DGX Spark loads **9**. Nothing was configured.
 That number is the optimization, and it is read off the silicon at startup.
 
-**Every word of the narration is spoken by the model itself**, on an Arm CPU,
-with no GPU and no network — the same 68.5 MB model these packages install.
+**Both voices in the video were made by this project**, and neither came from a
+commercial TTS service. The narration is my own voice, cloned from a single 33
+second recording with Qwen3-TTS running locally on the DGX Spark, and the two
+scenes where the model is on screen doing its job are spoken by the 68.5 MB Arm
+model itself, on the CPU — the same model these packages install. A heavyweight
+GPU model clones you once, and the small thing it produces runs on a CPU
+afterwards.
 
 ---
 
@@ -51,7 +56,7 @@ Three things, in this order. The first two need nothing installed.
 
 | | | time |
 |---|---|---|
-| **1** | ▶️ **[Watch the demo](https://youtu.be/Aw3xoq2rTG0)** — Apple M1 Max and DGX Spark side by side. Every word of the narration is spoken by the model itself, on an Arm CPU. | 3 min |
+| **1** | ▶️ **[Watch the demo](https://www.youtube.com/watch?v=L4THa8PWQi4)** — Apple M1 Max and DGX Spark side by side, with both voices made by this project. | 4 min |
 | **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 43 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
 | **3** | ⚡ `bash manage.sh install` — clean machine to a talking server. | 2 min |
 
@@ -225,8 +230,8 @@ process. Raw output: [`3_evidence/benchmark_of_record_dgx_spark.json`](3_evidenc
 | Kokoro-82M — GPU | 0.01418 | 40.1 ms | 3464 MB | 326 MB |
 | Kokoro-82M — Arm CPU | 0.33447 | 947.5 ms | 2661 MB | 326 MB |
 
-**Read the first and last rows together.** Kokoro needs a GPU and 3.4 GB to
-reach 40 ms. VoiceYog needs a CPU core and 356 MB to reach 83 ms — twice the
+**Read the first and last rows together.** Kokoro reaches 40 ms on a GPU, using
+3.4 GB. VoiceYog needs a CPU core and 356 MB to reach 83 ms — twice the
 latency, **9.7× less memory, no accelerator at all**, and **5.8× faster to the
 first word** because there is no CUDA context to build and no 326 MB to push
 into VRAM.
