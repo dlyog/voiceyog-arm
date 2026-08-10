@@ -1,26 +1,5 @@
 # VoiceYog: Arm-Optimized TTS
 
-Kokoro-82M is one of the best lightweight text-to-speech models I have used. It is already very fast on a GPU, but on an Arm CPU it can take close to a second to generate a sentence.
-
-That felt wasteful for my use case. Most of the time I need one language and one voice, not a full multi-voice TTS system.
-
-So I built VoiceYog: a smaller, single-voice TTS model and an Arm-aware inference runtime around it.
-
-On the same DGX Spark Arm CPU, VoiceYog is **8.6x faster than Kokoro CPU inference while using 7.5x less memory**. The model is 68.5 MB on disk and uses about 356 MB while running. Inference needs no GPU, no cloud API, and no internet connection.
-
-**Demo:** https://www.youtube.com/watch?v=L4THa8PWQi4  
-**Repository:** https://github.com/dlyog/voiceyog-arm
-
-The DGX Spark was my main development box. I generated the training data there, trained the student model on its GB10 Blackwell GPU, built the inference path there, and used it for the benchmark, profiling, and thread-tuning work.
-
-From the same project I prepared inference packages for two Arm targets: **DGX Spark and Apple Silicon**.
-
-That split became the main idea behind the project:
-
-**Use the GPU for the expensive work you do once. Run the voice on the Arm CPU for the work you do again and again.**
-
----
-
 ## Inspiration
 
 The original motivation was personal voice ownership.
@@ -334,3 +313,26 @@ Kokoro-82M is both the teacher behind this experiment and the baseline I used to
 VoiceYog is not an attempt to replace everything Kokoro can do. The project asks a narrower question: if I only need one voice, how much of the deployment cost can I remove, and how well can I make what remains run on Arm?
 
 For this project, the answer was: enough to make CPU-only TTS genuinely practical for my use case.
+
+---
+
+## Summary
+
+Kokoro-82M is one of the best lightweight text-to-speech models I have used. It is already very fast on a GPU, but on an Arm CPU it can take close to a second to generate a sentence.
+
+That felt wasteful for my use case. Most of the time I need one language and one voice, not a full multi-voice TTS system.
+
+So I built VoiceYog: a smaller, single-voice TTS model and an Arm-aware inference runtime around it.
+
+On the same DGX Spark Arm CPU, VoiceYog is **8.6x faster than Kokoro CPU inference while using 7.5x less memory**. The model is 68.5 MB on disk and uses about 356 MB while running. Inference needs no GPU, no cloud API, and no internet connection.
+
+**Demo:** https://www.youtube.com/watch?v=L4THa8PWQi4  
+**Repository:** https://github.com/dlyog/voiceyog-arm
+
+The DGX Spark was my main development box. I generated the training data there, trained the student model on its GB10 Blackwell GPU, built the inference path there, and used it for the benchmark, profiling, and thread-tuning work.
+
+From the same project I prepared inference packages for two Arm targets: **DGX Spark and Apple Silicon**.
+
+That split became the main idea behind the project:
+
+**Use the GPU for the expensive work you do once. Run the voice on the Arm CPU for the work you do again and again.**
