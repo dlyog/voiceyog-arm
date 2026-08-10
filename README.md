@@ -150,6 +150,19 @@ asked for. For this user it is dead weight, not a feature being sacrificed.
 
 ---
 
+## Architecture
+
+One pipeline. A recording goes in, and a voice that runs on an Arm CPU comes
+out. Every box is a script in this repository.
+
+![VoiceYog architecture: sample audio and a built corpus feed 5_generate_dataset.py, then 6_validate_dataset.py, 7_train.py on the GB10 GPU, 8_export_onnx.py, 1_core_topology.py, manage.sh install, and finally CPU-only inference at 82.9 ms per sentence in 356 MB](.github/architecture.png)
+
+**The GPU appears once, in `7_train.py`.** Everything after the export runs on
+the CPU — which is the whole point. Full walkthrough with the output each step
+actually printed: [`4_voice_pipeline/`](4_voice_pipeline).
+
+---
+
 ## How it gets there
 
 Two things, and neither is a compression trick.
