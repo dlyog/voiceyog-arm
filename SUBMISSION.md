@@ -104,6 +104,13 @@ there. You are not steering placement; you are removing the guarantee of bad
 placement.
 
 
+**Three numbers, not one.** The model is **4.8× smaller on disk** (326 MB →
+68.5 MB), needs **9.7× less memory to run** (3464 MB → 356 MB), and reaches
+first audio **5.8× sooner** from cold. They are separate wins: the disk figure
+is why it is downloadable and embeddable, the memory figure is why it fits
+beside everything else on the machine, and the cold-start figure is what a
+person actually waits for.
+
 **Where the Arm CPU time actually goes.** Tuning ONNX Runtime's threads only
 matters if ONNX Runtime is where the time is, so I measured it with Arm's own
 profiler — **Arm Performix**, `code_hotspots`, 41,593 samples on the GB10:

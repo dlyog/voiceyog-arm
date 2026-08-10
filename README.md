@@ -14,7 +14,8 @@ voice, one language, **68.5 MB** — and built an Arm-specific CPU path for it.
 
 | | Kokoro-82M, on a GPU | VoiceYog, on an Arm CPU | |
 |---|---|---|---|
-| memory | 3464 MB | **356 MB** | **9.7× less** |
+| model on disk | 326 MB | **68.5 MB** | **4.8× smaller** |
+| memory while running | 3464 MB | **356 MB** | **9.7× less** |
 | first audio, from cold | 5.42 s | **0.94 s** | **5.8× faster** |
 | per sentence, once loaded | **40.1 ms** | 82.9 ms | GPU 2.7× faster |
 | accelerator | required | **none** | |
