@@ -94,9 +94,9 @@ afterwards.
 
 ### Second video — can KleidiAI make it faster? A measured no
 
-https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4
-
-**▶ [voiceyog_kleidiai_findings.mp4](https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4)** — 2 min 47 s.
+**▶ [Watch it (2 min 47 s)](https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4)** —
+5.3 MB, [in this repository](3_evidence/video/voiceyog_kleidiai_findings.mp4),
+so it stays with the evidence it is about.
 
 Arm's KleidiAI ships hand-written matrix kernels and Microsoft wired them into
 ONNX Runtime, so the obvious question was whether switching it on makes this

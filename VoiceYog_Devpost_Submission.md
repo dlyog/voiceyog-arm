@@ -247,7 +247,7 @@ I later found the lesson I took from it was too broad. Static quantization emits
 
 ### KleidiAI could not run at all, and I tested that rather than assuming it
 
-**Watch this one instead of reading it, if you prefer — 2 minutes 47 seconds: [voiceyog_kleidiai_findings.mp4](https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4)**. It shows KleidiAI being installed and its kernels called directly, one returning and one dying, and then the 2x thread-placement result. Every terminal frame in it is real captured output; nothing was screen-recorded or typed for the camera, and the narration is my own cloned voice running locally on the DGX Spark.
+**There is a 2 minute 47 second video of this: [voiceyog_kleidiai_findings.mp4](https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4)** (5.3 MB, downloads from GitHub). It shows KleidiAI being installed and its kernels called directly, one returning and one dying, and then the 2x thread-placement result. Every terminal frame in it is real captured output; nothing was screen-recorded or typed for the camera, and the narration is my own cloned voice running locally on the DGX Spark.
 
 The packages pin ONNX Runtime 1.20.1, which contains no KleidiAI symbols. A 1.28.0 build on the same DGX Spark contains 11 `kai_run_matmul_*` symbols, so the obvious question was whether upgrading would make the CPU path faster.
 
