@@ -247,6 +247,8 @@ I later found the lesson I took from it was too broad. Static quantization emits
 
 ### KleidiAI could not run at all, and I tested that rather than assuming it
 
+**Watch this one instead of reading it, if you prefer — 2 minutes 47 seconds: [voiceyog_kleidiai_findings.mp4](https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4)**. It shows KleidiAI being installed and its kernels called directly, one returning and one dying, and then the 2x thread-placement result. Every terminal frame in it is real captured output; nothing was screen-recorded or typed for the camera, and the narration is my own cloned voice running locally on the DGX Spark.
+
 The packages pin ONNX Runtime 1.20.1, which contains no KleidiAI symbols. A 1.28.0 build on the same DGX Spark contains 11 `kai_run_matmul_*` symbols, so the obvious question was whether upgrading would make the CPU path faster.
 
 It cannot. ONNX Runtime installs every KleidiAI kernel behind a single check, `HasArm_SME() || HasArm_SME2()`, and neither the GB10's Cortex-X925 and Cortex-A725 cores nor the M1 Max implements SME.
@@ -266,6 +268,8 @@ Left unpinned, 1.28.0 is bimodal. It is usually 58 to 60 milliseconds, but it re
 So the upgrade is not free. Unpinned it is a coin flip between 5% faster and 2x slower. Pinned it is a reliable 5%. I have not isolated what tips it into the slow mode, so I am reporting the mitigation, which is measured, and not a mechanism, which is not.
 
 That is the same lesson as the rest of this project, arriving from a direction I did not expect: on an asymmetric Arm CPU, where the threads land matters more than which runtime you picked.
+
+All of it is reproducible in [kheledi/](https://github.com/dlyog/voiceyog-arm/tree/main/kheledi), which is deliberately self-contained: its own virtualenvs, its own frozen input fixture, no imports from the rest of the repository, and deleting the folder leaves the project unchanged. The input fixture is frozen rather than generated per machine because the DGX Spark has espeak-ng 1.51 and my Mac has 1.52, and the two disagree on liaison — regenerating locally would have given each platform different phonemes and quietly invalidated every comparison. Each result also records the machine's load average and marks itself usable or not, which is how I caught my first Apple run: it was taken while the laptop was compiling Rust, and it described a busy laptop rather than the model.
 
 ### The pipeline had to become real, not reference code
 

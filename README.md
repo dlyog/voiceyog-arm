@@ -92,6 +92,21 @@ model itself, on the CPU — the same model these packages install. A heavyweigh
 GPU model clones you once, and the small thing it produces runs on a CPU
 afterwards.
 
+### Second video — can KleidiAI make it faster? A measured no
+
+https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4
+
+**▶ [voiceyog_kleidiai_findings.mp4](https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4)** — 2 min 47 s.
+
+Arm's KleidiAI ships hand-written matrix kernels and Microsoft wired them into
+ONNX Runtime, so the obvious question was whether switching it on makes this
+model faster. **It cannot run here at all** — and rather than argue that from
+documentation, the video shows KleidiAI being installed and its kernels called
+directly: the NEON one returns, the fp32 SME one dies on `SIGILL`. It also
+shows the thing I was not looking for, a **2× regression from thread
+placement**. Every terminal frame is real captured output; nothing was
+screen-recorded or typed for the camera. Full write-up in [`kheledi/`](kheledi).
+
 ---
 
 ## Start here
