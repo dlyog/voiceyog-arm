@@ -1,0 +1,54 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+  /* Poster frame for the KleidiAI video.
+     GitHub will not embed a repository-hosted mp4 as a player -- its markdown
+     renderer strips <video> and turns bare .mp4 links into plain anchors, which
+     is verified against its own rendering API. So the README uses a clickable
+     poster instead, and this is it. Dark, because the payload of the video is
+     terminal output, and the poster should look like what you are about to
+     watch. */
+  *{box-sizing:border-box}
+  html,body{margin:0;width:1280px;height:720px;background:#0d0f12;color:#fff;overflow:hidden;
+    font:16px/1.5 -apple-system,"SF Pro Text",Inter,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{padding:62px 72px;height:720px;display:flex;flex-direction:column;position:relative}
+  .brand{font:600 15px/1 -apple-system,system-ui,sans-serif;letter-spacing:.02em;color:#fff}
+  .brand em{font-style:normal;color:#E59A4D}
+  .brand span{color:#6b737d;font-weight:400;margin-left:10px}
+  h1{font-size:66px;line-height:1.04;letter-spacing:-.03em;margin:34px 0 0;font-weight:700}
+  h1 .a{color:#E59A4D}
+  .verdict{font-size:66px;line-height:1.04;letter-spacing:-.03em;font-weight:700;color:#fff;margin:0}
+  .term{margin-top:38px;border-left:3px solid #ff6b60;padding:2px 0 2px 20px;
+        font:22px/1.65 "SF Mono",Menlo,Consolas,monospace;color:#9aa3ad}
+  .term b.bad{color:#ff6b60;font-weight:700}
+  .term b.ok{color:#5ec27a;font-weight:700}
+  .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end}
+  .meta{font:14px/1.7 "SF Mono",Menlo,monospace;color:#6b737d}
+  .meta b{color:#c4cbd3;font-weight:600}
+  .play{width:104px;height:104px;border-radius:50%;border:3px solid rgba(255,255,255,.92);
+        display:flex;align-items:center;justify-content:center;flex:none;
+        background:rgba(255,255,255,.06)}
+  .play i{display:block;width:0;height:0;margin-left:9px;
+          border-left:34px solid #fff;border-top:21px solid transparent;
+          border-bottom:21px solid transparent}
+</style></head><body>
+<div class="wrap">
+  <div class="brand">Voice<em>Yog</em> on Arm <span>· NVIDIA DGX Spark GB10</span></div>
+
+  <h1>Can <span class="a">Arm KleidiAI</span><br>make it faster?</h1>
+  <p class="verdict">A measured no.</p>
+
+  <div class="term">
+    RESULT&nbsp;&nbsp;neon&nbsp;&nbsp;-&gt; <b class="ok">returned normally</b><br>
+    RESULT&nbsp;&nbsp;sme&nbsp;&nbsp;&nbsp;-&gt; <b class="bad">KILLED by signal 4 (Illegal instruction)</b>
+  </div>
+
+  <div class="foot">
+    <div class="meta">
+      KleidiAI installed and its kernels called <b>directly</b><br>
+      2 min 47 s &nbsp;·&nbsp; every terminal frame is <b>real captured output</b>
+    </div>
+    <div class="play"><i></i></div>
+  </div>
+</div>
+</body></html>

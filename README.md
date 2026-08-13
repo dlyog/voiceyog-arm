@@ -94,8 +94,10 @@ afterwards.
 
 ### Second video — can KleidiAI make it faster? A measured no
 
-**▶ [Watch it (2 min 47 s)](https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4)** —
-5.3 MB, [in this repository](3_evidence/video/voiceyog_kleidiai_findings.mp4),
+[![Can KleidiAI make it faster? A measured no — 2 min 47 s](.github/kleidiai-thumbnail.png)](https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4)
+
+**▶ [voiceyog_kleidiai_findings.mp4](https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4)** — 2 min 47 s, 5.3 MB,
+[committed in this repository](3_evidence/video/voiceyog_kleidiai_findings.mp4)
 so it stays with the evidence it is about.
 
 Arm's KleidiAI ships hand-written matrix kernels and Microsoft wired them into
