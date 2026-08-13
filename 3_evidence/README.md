@@ -3,12 +3,13 @@
 Every number in this submission, in the file that produced it.
 
 ```bash
-python3 verify_claims.py          # 33 claims, no dependencies, no model, no network
+python3 verify_claims.py          # 55 claims, no dependencies, no model, no network
 python3 verify_claims.py --show   # each one with its measured value and source
 ```
 
-Exit 0 means every figure in `README.md` and `SUBMISSION.md` is backed by a
-measurement here. Exit 1 names the ones that are not.
+Exit 0 means every figure in `README.md` and
+`VoiceYog_Devpost_Submission.md` is backed by a measurement here. Exit 1 names
+the ones that are not.
 
 | file | what produced it |
 |---|---|

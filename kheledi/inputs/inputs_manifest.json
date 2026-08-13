@@ -1,0 +1,120 @@
+{
+  "npz": "/home/dlyog/unsloth/tts_finetune/10_KleidiAI/evidence/inputs.npz",
+  "sha256": "771d0623096affc723b3df86a37bc7b41f9cd2a520d23906f19fd9b5b9b53e7f",
+  "n_sentences": 20,
+  "espeak_version": "eSpeak NG text-to-speech: 1.51  Data at: /usr/lib/aarch64-linux-gnu/espeak-ng-data",
+  "model_config": "/home/dlyog/.voiceyog/models/kokoro-heart-new/v3/kokoro-heart-new.onnx.json",
+  "scales_production": [
+    0.6669999957084656,
+    1.0,
+    0.800000011920929
+  ],
+  "scales_deterministic": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "scales_note": "deterministic = noise_scale 0, noise_w 0 -> the two RandomNormalLike nodes contribute nothing, so output length and content are fixed across runs and runtimes",
+  "sentences": [
+    {
+      "index": 0,
+      "text": "The weather changed suddenly this afternoon.",
+      "n_phoneme_ids": 89
+    },
+    {
+      "index": 1,
+      "text": "Could you please pass me that book?",
+      "n_phoneme_ids": 71
+    },
+    {
+      "index": 2,
+      "text": "Wow, I did not expect to see you here!",
+      "n_phoneme_ids": 91
+    },
+    {
+      "index": 3,
+      "text": "Our meeting has been moved to three o'clock.",
+      "n_phoneme_ids": 95
+    },
+    {
+      "index": 4,
+      "text": "She walked quietly across the empty room.",
+      "n_phoneme_ids": 93
+    },
+    {
+      "index": 5,
+      "text": "How many people are coming to dinner tonight?",
+      "n_phoneme_ids": 97
+    },
+    {
+      "index": 6,
+      "text": "The bridge was built over a hundred years ago.",
+      "n_phoneme_ids": 103
+    },
+    {
+      "index": 7,
+      "text": "I really appreciate everything you have done.",
+      "n_phoneme_ids": 95
+    },
+    {
+      "index": 8,
+      "text": "Turn left at the second traffic light.",
+      "n_phoneme_ids": 83
+    },
+    {
+      "index": 9,
+      "text": "This recipe calls for two cups of sugar.",
+      "n_phoneme_ids": 95
+    },
+    {
+      "index": 10,
+      "text": "Are you sure that's the right address?",
+      "n_phoneme_ids": 71
+    },
+    {
+      "index": 11,
+      "text": "The engine made a strange noise before it stopped.",
+      "n_phoneme_ids": 111
+    },
+    {
+      "index": 12,
+      "text": "He finished the marathon in just under four hours.",
+      "n_phoneme_ids": 111
+    },
+    {
+      "index": 13,
+      "text": "Please remember to lock the door on your way out.",
+      "n_phoneme_ids": 107
+    },
+    {
+      "index": 14,
+      "text": "What a beautiful sunset over the mountains.",
+      "n_phoneme_ids": 93
+    },
+    {
+      "index": 15,
+      "text": "The report is due by the end of next week.",
+      "n_phoneme_ids": 99
+    },
+    {
+      "index": 16,
+      "text": "I can't believe how fast the year went by.",
+      "n_phoneme_ids": 95
+    },
+    {
+      "index": 17,
+      "text": "Set the oven to three hundred fifty degrees.",
+      "n_phoneme_ids": 99
+    },
+    {
+      "index": 18,
+      "text": "They rebuilt the old library after the fire.",
+      "n_phoneme_ids": 95
+    },
+    {
+      "index": 19,
+      "text": "Can you hear me clearly on this call?",
+      "n_phoneme_ids": 83
+    }
+  ]
+}

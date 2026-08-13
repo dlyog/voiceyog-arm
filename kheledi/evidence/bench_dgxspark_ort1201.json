@@ -1,0 +1,165 @@
+{
+  "label": "dgxspark_ort1201",
+  "measured_at_utc": "2026-08-13 13:32:20",
+  "platform": {
+    "os": "Linux",
+    "os_version": "Ubuntu 24.04.4 LTS \u00b7 kernel 6.17.0-1014-nvidia",
+    "cpu": "Cortex-X925 + Cortex-A725",
+    "total_cores": 20,
+    "performance_cores": 10,
+    "efficiency_cores": 10,
+    "performance_core_ids": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "asymmetric": true,
+    "midr_el1": [
+      "0x00000000410fd851",
+      "0x00000000410fd871"
+    ],
+    "cpu_capacity": {
+      "0": 718,
+      "1": 718,
+      "2": 718,
+      "3": 718,
+      "4": 718,
+      "5": 997,
+      "6": 997,
+      "7": 997,
+      "8": 997,
+      "9": 997,
+      "10": 731,
+      "11": 731,
+      "12": 731,
+      "13": 731,
+      "14": 731,
+      "15": 1017,
+      "16": 1017,
+      "17": 1017,
+      "18": 1017,
+      "19": 1024
+    },
+    "isa": {
+      "sve": true,
+      "sve2": true,
+      "i8mm": true,
+      "bf16": true,
+      "dotprod": true,
+      "fp16": true,
+      "sme": false,
+      "sme2": false
+    },
+    "isa_source": "getauxval AT_HWCAP=0xefffffff AT_HWCAP2=0x801af3ff",
+    "machine": "aarch64",
+    "hostname": "dgx1",
+    "python": "3.12.3",
+    "tuned_intra_op_threads": 9,
+    "kleidiai_reachable": false,
+    "kleidiai_note": "ONNX Runtime installs every KleidiAI kernel behind HasArm_SME() || HasArm_SME2(). Without one of those this CPU never dispatches to KleidiAI, and executing its fp32 kernels anyway raises SIGILL."
+  },
+  "runtime": {
+    "onnxruntime": "1.20.1",
+    "providers_available": [
+      "AzureExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "provider_used": [
+      "CPUExecutionProvider"
+    ],
+    "python": "3.12.3",
+    "kleidiai": {
+      "kai_total": 0,
+      "sme_kernels": 0,
+      "non_sme_kernels": 0,
+      "sample": []
+    }
+  },
+  "model": {
+    "path": "/home/dlyog/.voiceyog/models/kokoro-heart-new/v3/kokoro-heart-new.onnx",
+    "size_bytes": 71844142,
+    "size_mb": 71.8
+  },
+  "config": {
+    "intra_op_num_threads": 9,
+    "inter_op_num_threads": 1,
+    "graph_optimization_level": "ORT_ENABLE_ALL",
+    "execution_mode": "ORT_SEQUENTIAL",
+    "scales": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "deterministic": true,
+    "pinned": true,
+    "cpu_affinity": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      15,
+      16,
+      17,
+      18,
+      19
+    ]
+  },
+  "workload": {
+    "sentences": 20,
+    "iters": 60,
+    "warmup_iters": 5,
+    "total_inferences": 1200,
+    "inputs_npz": "inputs/inputs.npz"
+  },
+  "timing": {
+    "session_init_s": 0.6201,
+    "warmup_total_s": 5.9397,
+    "wall_s": 70.1687,
+    "latency_ms": {
+      "mean": 58.471,
+      "stdev": 6.058,
+      "min": 45.203,
+      "p50": 59.204,
+      "p90": 65.908,
+      "p95": 66.688,
+      "p99": 68.182,
+      "max": 71.496
+    },
+    "throughput_inferences_per_s": 17.102,
+    "audio_seconds_produced": 2339.2,
+    "rtf": 0.029997
+  },
+  "resources": {
+    "cpu_percent_mean": 886.6,
+    "peak_rss_mb": 200.1,
+    "sampler": "psutil"
+  },
+  "machine_state": {
+    "before": {
+      "load_1m": 0.89892578125,
+      "load_5m": 4.44677734375,
+      "load_15m": 4.81640625,
+      "cores": 20,
+      "load_per_core": 0.045,
+      "verdict": "idle"
+    },
+    "after": {
+      "load_1m": 7.056640625,
+      "load_5m": 5.5673828125,
+      "load_15m": 5.18212890625,
+      "cores": 20,
+      "load_per_core": 0.353,
+      "verdict": "CONTENDED"
+    }
+  },
+  "valid": true,
+  "validity_note": "machine was idle; figures are usable"
+}

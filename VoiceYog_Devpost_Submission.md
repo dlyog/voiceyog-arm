@@ -233,7 +233,7 @@ On the GB10, the performance cores are not simply the first half or second half 
 
 That broke an early attempt to pin threads using a simple CPU range and convinced me that the runtime should read the hardware instead of guessing from core numbers.
 
-### INT8 was smaller, but unusable
+### Dynamic INT8 was smaller, but unusable
 
 Dynamic INT8 quantization made the model file about 3.3x smaller.
 
@@ -242,6 +242,30 @@ It also rewrote convolutions into `ConvInteger`, which the ONNX Runtime CPU prov
 So the model would not load on either target.
 
 I kept that result in the project because "smaller file" is not an optimization if the artifact cannot run.
+
+I later found the lesson I took from it was too broad. Static quantization emits `QLinearConv` instead, and that operator does have an AArch64 kernel: the quantized convolution runs at 94.8 microseconds per call against 385.1 for FP32, in a model 3.5x smaller. "INT8 does not run on Arm" was the wrong conclusion. "`ConvInteger` does not run on Arm" was the right one.
+
+### KleidiAI could not run at all, and I tested that rather than assuming it
+
+The packages pin ONNX Runtime 1.20.1, which contains no KleidiAI symbols. A 1.28.0 build on the same DGX Spark contains 11 `kai_run_matmul_*` symbols, so the obvious question was whether upgrading would make the CPU path faster.
+
+It cannot. ONNX Runtime installs every KleidiAI kernel behind a single check, `HasArm_SME() || HasArm_SME2()`, and neither the GB10's Cortex-X925 and Cortex-A725 cores nor the M1 Max implements SME.
+
+I did not want to stop at reading the dispatch logic, so I installed KleidiAI from Arm's repository on both machines and called its kernels directly, with ONNX Runtime out of the picture. On both machines the NEON kernel returns normally and the FP32 SME kernel dies with an illegal instruction, before it touches any matrix data. The gate in ONNX Runtime is not a limitation. It is the check that prevents that crash.
+
+Two smaller things fell out of the attempt. The DGX Spark's gcc 13.3.0 rejects `-march=...+sme2` outright, because GCC only gained SME in version 14, and KleidiAI builds anyway because it emits raw instruction encodings instead of relying on the assembler. On macOS the same source refuses to compile for the default Apple target, because the M1 Max has no SVE at all.
+
+KleidiAI would also have been aimed at the wrong operator here. It accelerates matmul, and matmul is under 1% of this model's CPU time, while convolution is about 70%. The kernels that do run on these CPUs without SME are INT4 matmul kernels, and this model is FP32.
+
+Upgrading the runtime is worth something on its own, but not unconditionally, and the condition turned out to be the more interesting result.
+
+Pinned to the performance cores, 1.20.1 to 1.28.0 is 5.2% faster at p50 over 1,200 inferences. That is a general ONNX Runtime improvement, not a KleidiAI one, and I report it as such.
+
+Left unpinned, 1.28.0 is bimodal. It is usually 58 to 60 milliseconds, but it repeatedly measured around 120 milliseconds on an idle machine with nothing else running, which is a 2x regression. ONNX Runtime 1.20.1 never did that in any run I took. The slow mode is thread placement: some of the intra-op pool lands on Cortex-A725 efficiency cores, and because the join at the end of every operator waits for the slowest thread, the whole graph runs at efficiency-core speed.
+
+So the upgrade is not free. Unpinned it is a coin flip between 5% faster and 2x slower. Pinned it is a reliable 5%. I have not isolated what tips it into the slow mode, so I am reporting the mitigation, which is measured, and not a mechanism, which is not.
+
+That is the same lesson as the rest of this project, arriving from a direction I did not expect: on an asymmetric Arm CPU, where the threads land matters more than which runtime you picked.
 
 ### The pipeline had to become real, not reference code
 
@@ -291,11 +315,13 @@ There is still work left in the cooperative CPU/GPU path. Today the stages run m
 
 I have not implemented that yet, so I am not claiming a result.
 
-### Newer ONNX Runtime and KleidiAI
+### INT8 on the convolutions
 
-The current package pins ONNX Runtime 1.20.1. A newer runtime on the same DGX Spark contains Arm KleidiAI kernels that are not present in the pinned version.
+Profiling says about 70% of my CPU time is convolution and under 1% is matmul, so the only optimization left that can move the number meaningfully is integer convolution.
 
-That makes upgrading and re-measuring the CPU path an obvious next experiment.
+Static QDQ quantization already runs: it produces `QLinearConv` rather than `ConvInteger`, and the quantized convolution measures 94.8 microseconds per call against 385.1 for FP32.
+
+The version I built quantizes the whole graph, which moved the duration predictor and changed the output length on 17 of 20 sentences, so it is not shippable. The next step is to quantize the vocoder only and leave the duration path in FP32.
 
 ### Observe real thread placement
 

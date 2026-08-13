@@ -107,8 +107,8 @@ Three things, in this order. The first two need nothing installed.
 🔬 **[Reproduce the quality numbers](#reproduce-the-quality-numbers)** — one
 command on a DGX Spark, no setup.
 📐 **[ARCHITECTURE.html](ARCHITECTURE.html)** — the whole design in one picture.
-📄 **[SUBMISSION.md](SUBMISSION.md)** — the full write-up, with the reasoning
-behind every number.
+📄 **[VoiceYog_Devpost_Submission.md](VoiceYog_Devpost_Submission.md)** — the full
+write-up, with the reasoning behind every number.
 📝 **[Distribution-Time Voice Specialization](https://www.dlyog.com/papers/DistributionTimeVoiceSpecialization)**
 ([PDF](https://www.dlyog.com/papers/DistributionTimeVoiceSpecialization.pdf)) — the preprint
 that generalises this result: choose the voice at distribution time, not inside
@@ -421,9 +421,9 @@ Every utterance uses both processors; neither can produce audio alone.
 python3 3_evidence/verify_claims.py
 ```
 
-No dependencies, no model, no network. It checks **all 43 figures** in this
-README and `SUBMISSION.md` against the JSON the measurement scripts wrote, and
-exits non-zero if any disagree.
+No dependencies, no model, no network. It checks **all 55 figures** in this
+README against the JSON the measurement scripts wrote, and exits non-zero if
+any disagree.
 
 Then, on your own silicon:
 
@@ -444,7 +444,7 @@ It will contradict me if I am wrong.
 ```
 manage.sh            install | start | stop | status | log | demo | uninstall
 ARCHITECTURE.html    the design in one picture
-SUBMISSION.md        the full write-up (SUBMISSION.html renders identically)
+VoiceYog_Devpost_Submission.md   the full write-up
 
 1_packages/          download.sh + SHA256SUMS   (the zips are release assets)
 2_arm_optimization/  the optimization, as four scripts you can run
@@ -490,13 +490,28 @@ Reproduce it: `2_arm_optimization/3_int8_negative_result.py`.
   pipeline and runs strictly before the GPU stage, so each processor idles
   while the other works. Overlapping `prefix(N+1)` with `decode(N)` is the
   largest remaining win. Designed, not built, not claimed.
-- **KleidiAI is absent from the runtime I pin, and present in a newer one.**
-  The packages ship onnxruntime 1.20.1, which contains **0** KleidiAI symbols
-  on either target. A 1.28.0 prerelease build (commit `45de2a8b06`) on the same DGX Spark contains **11**
-  `kai_run_matmul_*` symbols. Arm's optimized matmul kernels would accelerate
-  exactly the CPU prefix that is now the bottleneck, so upgrading the pinned
-  runtime is a concrete measurable next step rather than a wish — I have not
-  measured it, so I am not claiming it.
+- **KleidiAI cannot run on either target, and I tested that rather than
+  inferring it.** The packages ship onnxruntime 1.20.1, which contains **0**
+  KleidiAI symbols on either target; a 1.28.0 build on the same DGX Spark
+  contains **11** `kai_run_matmul_*` symbols. Those symbols are unreachable
+  here. ONNX Runtime installs every KleidiAI kernel behind one check —
+  `HasArm_SME() || HasArm_SME2()` in `mlas/lib/platform.cpp` — and neither
+  GB10's Cortex-X925/A725 nor the M1 Max implements SME. So I installed
+  KleidiAI myself and called its kernels directly, bypassing ONNX Runtime: on
+  **both** machines its NEON kernel returns normally and its fp32 SME kernel
+  dies on **SIGILL**, before it touches any matrix data. The gate is not a
+  limitation of ONNX Runtime; it is the check that prevents that crash.
+  It would also be the wrong target: profiling with the performance cores
+  pinned puts about **70%** of kernel time in convolution (68.6-71.1% over
+  four runs) and under **1%** in matmul, and the KleidiAI kernels that *do*
+  run on these CPUs are INT4 matmul kernels, while this model is FP32.
+  Upgrading the pin is worth **5.2%** at p50 over 1,200 inferences — as a
+  general runtime improvement, not a KleidiAI one — but **only with the
+  performance cores pinned.** Left unpinned, 1.28.0 is bimodal on GB10:
+  usually 58–60 ms, and repeatedly **~120 ms, a 2× regression**, on an idle
+  machine, because the scheduler places part of the intra-op pool on
+  Cortex-A725 efficiency cores and the join barrier then waits on them.
+  1.20.1 never showed that. Reproduce all of it in [`kheledi/`](kheledi).
 - **English only, one voice, by design.** Not validated beyond ~6.25 s per
   chunk; longer text is chunked by sentence automatically.
 

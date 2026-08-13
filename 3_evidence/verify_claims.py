@@ -2,9 +2,9 @@
 """
 Every number in this submission, checked against the file that produced it.
 
-The rule this enforces: if a figure appears in README.md or SUBMISSION.md, it
-exists in one of the JSON files beside this script, and a measurement script
-put it there. No figure is typed by a human.
+The rule this enforces: if a figure appears in README.md or
+VoiceYog_Devpost_Submission.md, it exists in one of the JSON files beside this
+script, and a measurement script put it there. No figure is typed by a human.
 
 Why bother. An earlier version of this project's documentation claimed "3x
 faster than Kokoro-GPU". Re-measured properly, with both engines in the same
@@ -296,7 +296,7 @@ def main() -> int:
     claims = build_claims(d)
 
     print()
-    print(f"  Claims in README.md and SUBMISSION.md, checked against the")
+    print(f"  Claims in README.md and VoiceYog_Devpost_Submission.md, checked against the")
     print(f"  measurements in this directory.  Model under test: {MODEL}")
     print()
 

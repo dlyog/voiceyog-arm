@@ -1,0 +1,170 @@
+{
+  "label": "dgxspark_ort1280",
+  "measured_at_utc": "2026-08-13 13:36:13",
+  "platform": {
+    "os": "Linux",
+    "os_version": "Ubuntu 24.04.4 LTS \u00b7 kernel 6.17.0-1014-nvidia",
+    "cpu": "Cortex-X925 + Cortex-A725",
+    "total_cores": 20,
+    "performance_cores": 10,
+    "efficiency_cores": 10,
+    "performance_core_ids": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "asymmetric": true,
+    "midr_el1": [
+      "0x00000000410fd851",
+      "0x00000000410fd871"
+    ],
+    "cpu_capacity": {
+      "0": 718,
+      "1": 718,
+      "2": 718,
+      "3": 718,
+      "4": 718,
+      "5": 997,
+      "6": 997,
+      "7": 997,
+      "8": 997,
+      "9": 997,
+      "10": 731,
+      "11": 731,
+      "12": 731,
+      "13": 731,
+      "14": 731,
+      "15": 1017,
+      "16": 1017,
+      "17": 1017,
+      "18": 1017,
+      "19": 1024
+    },
+    "isa": {
+      "sve": true,
+      "sve2": true,
+      "i8mm": true,
+      "bf16": true,
+      "dotprod": true,
+      "fp16": true,
+      "sme": false,
+      "sme2": false
+    },
+    "isa_source": "getauxval AT_HWCAP=0xefffffff AT_HWCAP2=0x801af3ff",
+    "machine": "aarch64",
+    "hostname": "dgx1",
+    "python": "3.12.3",
+    "tuned_intra_op_threads": 9,
+    "kleidiai_reachable": false,
+    "kleidiai_note": "ONNX Runtime installs every KleidiAI kernel behind HasArm_SME() || HasArm_SME2(). Without one of those this CPU never dispatches to KleidiAI, and executing its fp32 kernels anyway raises SIGILL."
+  },
+  "runtime": {
+    "onnxruntime": "1.28.0",
+    "providers_available": [
+      "AzureExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "provider_used": [
+      "CPUExecutionProvider"
+    ],
+    "python": "3.12.3",
+    "kleidiai": {
+      "kai_total": 13,
+      "sme_kernels": 9,
+      "non_sme_kernels": 4,
+      "sample": [
+        "kai_run_imatmul_clamp_f32_f32p2vlx1_f32p2vlx1b_2vlx2vl_sme2_mopa",
+        "kai_run_imatmul_clamp_f32_f32p2vlx1_f32p2vlx1b_2vlx2vl_sme_mopa",
+        "kai_run_matmul_clamp_f32_bf16p2vlx2_bf16p2vlx2_2vlx2vl_sme2_mopa",
+        "kai_run_matmul_clamp_f32_f32_f32p2vlx1b_1x16vl_sme2_mla"
+      ]
+    }
+  },
+  "model": {
+    "path": "/home/dlyog/.voiceyog/models/kokoro-heart-new/v3/kokoro-heart-new.onnx",
+    "size_bytes": 71844142,
+    "size_mb": 71.8
+  },
+  "config": {
+    "intra_op_num_threads": 9,
+    "inter_op_num_threads": 1,
+    "graph_optimization_level": "ORT_ENABLE_ALL",
+    "execution_mode": "ORT_SEQUENTIAL",
+    "scales": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "deterministic": true,
+    "pinned": true,
+    "cpu_affinity": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      15,
+      16,
+      17,
+      18,
+      19
+    ]
+  },
+  "workload": {
+    "sentences": 20,
+    "iters": 60,
+    "warmup_iters": 5,
+    "total_inferences": 1200,
+    "inputs_npz": "inputs/inputs.npz"
+  },
+  "timing": {
+    "session_init_s": 0.6518,
+    "warmup_total_s": 5.5378,
+    "wall_s": 66.7966,
+    "latency_ms": {
+      "mean": 55.661,
+      "stdev": 5.33,
+      "min": 44.083,
+      "p50": 56.141,
+      "p90": 62.375,
+      "p95": 63.115,
+      "p99": 63.878,
+      "max": 64.985
+    },
+    "throughput_inferences_per_s": 17.965,
+    "audio_seconds_produced": 2339.2,
+    "rtf": 0.028555
+  },
+  "resources": {
+    "cpu_percent_mean": 900.4,
+    "peak_rss_mb": 208.6,
+    "sampler": "psutil"
+  },
+  "machine_state": {
+    "before": {
+      "load_1m": 0.74560546875,
+      "load_5m": 3.37841796875,
+      "load_15m": 4.40380859375,
+      "cores": 20,
+      "load_per_core": 0.037,
+      "verdict": "idle"
+    },
+    "after": {
+      "load_1m": 6.43701171875,
+      "load_5m": 4.55517578125,
+      "load_15m": 4.7412109375,
+      "cores": 20,
+      "load_per_core": 0.322,
+      "verdict": "busy"
+    }
+  },
+  "valid": true,
+  "validity_note": "machine was idle; figures are usable"
+}
