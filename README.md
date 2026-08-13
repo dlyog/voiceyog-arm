@@ -94,11 +94,9 @@ afterwards.
 
 ### Second video — can KleidiAI make it faster? A measured no
 
-[![Can KleidiAI make it faster? A measured no — 2 min 47 s](.github/kleidiai-thumbnail.png)](https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4)
+[![Can KleidiAI make it faster? A measured no — 2 min 47 s](.github/kleidiai-thumbnail.png)](https://youtu.be/r2mlrF9LK4E)
 
-**▶ [voiceyog_kleidiai_findings.mp4](https://github.com/dlyog/voiceyog-arm/raw/main/3_evidence/video/voiceyog_kleidiai_findings.mp4)** — 2 min 47 s, 5.3 MB,
-[committed in this repository](3_evidence/video/voiceyog_kleidiai_findings.mp4)
-so it stays with the evidence it is about.
+**▶ [youtu.be/r2mlrF9LK4E](https://youtu.be/r2mlrF9LK4E)** — 2 min 47 s.
 
 Arm's KleidiAI ships hand-written matrix kernels and Microsoft wired them into
 ONNX Runtime, so the obvious question was whether switching it on makes this
@@ -120,6 +118,11 @@ Three things, in this order. The first two need nothing installed.
 | **1** | ▶️ **[Watch the demo](https://www.youtube.com/watch?v=L4THa8PWQi4)** — Apple M1 Max and DGX Spark side by side, with both voices made by this project. | 4 min |
 | **2** | ✅ `python3 3_evidence/verify_claims.py` — checks all 55 figures in this README against the measurements. No dependencies, no model, no network. | 5 s |
 | **3** | ⚡ `bash manage.sh install` — clean machine to a talking server. | 2 min |
+
+▶️ **[Can KleidiAI make it faster? A measured no](https://youtu.be/r2mlrF9LK4E)** — the
+second video, 2 min 47 s: KleidiAI installed and its kernels called directly
+until one dies on `SIGILL`, and the 2× thread-placement regression found while
+measuring it. Write-up in [`kheledi/`](kheledi).
 
 🔬 **[Reproduce the quality numbers](#reproduce-the-quality-numbers)** — one
 command on a DGX Spark, no setup.
